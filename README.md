@@ -1,7 +1,9 @@
 ## EXPLORA: Efficient Exemplar Subset Selection for Complex In-context Numerical Reasoning
 
 This repository contains the implementation details of our Exemplar Selection Algorithm for In-context Learning.
+https://aclanthology.org/2024.emnlp-main.307.pdf
 
+Project Page: https://kiranpurohit.github.io/Explore/
 
 
 ## Requirements
