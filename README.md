@@ -14,6 +14,7 @@ pip install -r requirements.txt
 ```
 
 ## Data Preparation
+Train, dev and test samples for all datasets can be found in datasets/ folder. Please note for some datasets test labels arent public. So dev set is emplyoed for evals as done in literature.
 
 Please download the embeddings for the datasets used from this [Link](https://drive.google.com/drive/folders/1pWFBRMBsnWS5Ty1owK2lyIy7vPCIO4_R?usp=sharing) 
 
