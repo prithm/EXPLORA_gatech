@@ -25,3 +25,6 @@ Please download the embeddings for the datasets used from this [Link](https://dr
 `GSM8K/explora+SC.py` - It contains the code for exemplar selection on GSM8K using Explora approach with self-consistency decoding.\
 `TabMwp/explora+SC.py` - It contains the code for exemplar selection on TabMWP using Explora approach with self-consistency decoding.
 
+StrategyQA is the best fit for this but it is not implemented in the repo.
+Next best option: Reuse gsm8k dataset as Question: [All the wiki sources, original question, please provide a 1 word answer], Answer: [Answer]
+
