@@ -225,10 +225,10 @@ def static_subset_selection(val_data, train_data, k, test_data):
     # test_data = 15, val_data=9, train_data=30-9=21, k=5, L=40, U=10, V=10, L-U=30
     # test_emb = torch.Tensor(test_emb)
 
-    with open('transfer_emb.pkl', 'rb') as f:
+    with open('datasets/GSM8K/gsm8k_embeddings/transfer_emb.pkl', 'rb') as f:
         transfer_emb = pickle.load(f)
     
-    with open('val_emb.pkl', 'rb') as f1:
+    with open('datasets/GSM8K/gsm8k_embeddings/val_emb.pkl', 'rb') as f1:
         val_emb = pickle.load(f1)
     
     val_emb = val_emb[:20]
@@ -1047,9 +1047,9 @@ def test_few_shot_prediction():
     # with open("train.jsonl", 'r') as f:
     #     json_list = list(f)
     # train_set = [json.loads(x) for x in json_list]
-    train_set = pd.read_csv("train.csv")
+    train_set = pd.read_csv("datasets/GSM8K/gsm8k_train.csv")
 
-    with open("test.jsonl", 'r') as f:
+    with open("datasets/GSM8K/gsm8k_test.jsonl", 'r') as f:
         json_list = list(f)
     test_set = [json.loads(x) for x in json_list]
 
