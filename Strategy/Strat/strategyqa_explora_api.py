@@ -31,36 +31,36 @@ else:
 ###########################################################################################
 # model_name = "google/flan-t5-large"
 # model = AutoModelForSeq2SeqLM.from_pretrained(model_name, torch_dtype=torch.float16)
-# # model_name = "mistralai/Mistral-7B-Instruct-v0.1"
-# # model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16)
-# tokenizer = AutoTokenizer.from_pretrained(model_name, torch_dtype=torch.float16)
-# model = model.to(device)
+model_name = "mistralai/Mistral-7B-Instruct-v0.1"
+model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16)
+tokenizer = AutoTokenizer.from_pretrained(model_name, torch_dtype=torch.float16)
+model = model.to(device)
 
-# pipeline = transformers.pipeline(
-#     "text-generation",
-#     model=model_name,
-#     torch_dtype=torch.float16,
-#     device_map="auto",
-# )
+pipeline = transformers.pipeline(
+    "text-generation",
+    model=model_name,
+    torch_dtype=torch.float16,
+    device_map="auto",
+)
 
-# def get_completion(msg_in):
+def get_completion(msg_in):
 
-#     messages=[{
-#                 "role": "user",
-#                 "content": "You are a helpful, respectful and honest assistant helping to solve math word problems or tasks requiring reasoning or math, use the Chain-of-Thought methodology by following given examples to explain your step-by-step calculations or logic.Do not generate examples in your answer",
-#             }]
-#     text={"role": "assistant", "content":""" Follow given examples and solve the Test Question at end in similar manner by decomposing the original questions
-#          Examples:{}""".format(msg_in)}
-#     messages.append(text)
+    messages=[{
+                "role": "user",
+                "content": "You are a helpful, respectful and honest assistant helping to solve math word problems or tasks requiring reasoning or math, use the Chain-of-Thought methodology by following given examples to explain your step-by-step calculations or logic.Do not generate examples in your answer",
+            }]
+    text={"role": "assistant", "content":""" Follow given examples and solve the Test Question at end in similar manner by decomposing the original questions
+         Examples:{}""".format(msg_in)}
+    messages.append(text)
 
-#     prompt = msg_in
-#     #prompt = pipeline.tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-#     outputs = pipeline(prompt, max_new_tokens=256, do_sample=True, num_return_sequences=10, temperature=0.5, top_k=10, top_p=1.0)
-#     print("OUTPUTS", outputs)
-#     out_text = []
-#     for x in range(0, 10):
-#         out_text.append(outputs[x]["generated_text"])
-#     return out_text
+    prompt = msg_in
+    #prompt = pipeline.tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+    outputs = pipeline(prompt, max_new_tokens=256, do_sample=True, num_return_sequences=10, temperature=0.5, top_k=10, top_p=1.0)
+    print("OUTPUTS", outputs)
+    out_text = []
+    for x in range(0, 10):
+        out_text.append(outputs[x]["generated_text"])
+    return out_text
 
 
 #####################################################################################################
@@ -89,49 +89,46 @@ for api_key, endpoint_url in zip(api_keys, endpoint_urls):
 
 
 
-###Gen response from API
-@retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(5))
-def get_completion(prompt, api_key, endpoint_url, hard_code_exception=False):
+# ###Gen response from API
+# @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(5))
+# def get_completion(prompt, api_key, endpoint_url, hard_code_exception=False):
 
-    max_tokens=256
-    if 'hf.space' in endpoint_url:
-        client = Client(endpoint_url)
-        result = client.predict(
-                        prompt, # str in 'Message' Textbox component
-                        api_name="/chat"
-        )
-        return result.strip()
-    openai.api_key = api_key
-    openai.api_base = f"{endpoint_url}/v1"
-    model_names = openai.Model.list()
-    model_name = model_names["data"][0]["id"]
+#     max_tokens=256
+#     if 'hf.space' in endpoint_url:
+#         client = Client(endpoint_url)
+#         result = client.predict(
+#                         prompt, # str in 'Message' Textbox component
+#                         api_name="/chat"
+#         )
+#         return result.strip()
+#     openai.api_key = api_key
+#     openai.api_base = f"{endpoint_url}/v1"
+#     model_names = openai.Model.list()
+#     model_name = model_names["data"][0]["id"]
 
-    res = openai.Completion.create(
-        model=model_name,  # Replace with your model name
-        prompt=system_message + prompt,
-        # messages=[
-        #     {"role": "system", "content": system_message},
-        #     {"role": "user", "content": prompt},
-        # ],
-        temperature=0.3,
-        top_k=10,
-        top_p=1.0,
-        n=10,
-        max_tokens=256,
-    )
-    out_text = res['choices'][0]['text'].strip()
-    # out_text = []
-    # for x in range(0, 10):
-    #     out_text.append(res['choices'][x]['text'].strip())
-    return out_text
-#####################################################################################################
-
-
-
+#     res = openai.Completion.create(
+#         model=model_name,  # Replace with your model name
+#         prompt=system_message + prompt,
+#         # messages=[
+#         #     {"role": "system", "content": system_message},
+#         #     {"role": "user", "content": prompt},
+#         # ],
+#         temperature=0.3,
+#         top_k=10,
+#         top_p=1.0,
+#         n=10,
+#         max_tokens=256,
+#     )
+#     out_text = res['choices'][0]['text'].strip()
+#     # out_text = []
+#     # for x in range(0, 10):
+#     #     out_text.append(res['choices'][x]['text'].strip())
+#     return out_text
+# #####################################################################################################
 
 def llm_output(user_query, hard_code_exception=False):
-    results = get_completion(user_query, api_keys[0], endpoint_urls[0], hard_code_exception=hard_code_exception)
-    #results = get_completion(user_query)
+    # results = get_completion(user_query, api_keys[0], endpoint_urls[0], hard_code_exception=hard_code_exception)
+    results = get_completion(user_query)
     return results
 
 
@@ -1117,7 +1114,7 @@ def static_subset_selection(val_data, train_data, k, test_data):
         print("MAX_overlap ",max_overlap)
         
 
-        folder1 = f"output/loss_folder_llama"
+        folder1 = f"output/loss_folder_strategyqa_mistral"
         np.savez(f'{folder1}', LLM_loss_on_val = LLM_loss_on_val, avg_LLM_loss_on_val = avg_LLM_loss_on_val, min_LLM_loss_on_val = min_LLM_loss_on_val, max_LLM_loss_on_val = max_LLM_loss_on_val, LLM_loss_on_V_on_val = LLM_loss_on_V_on_val, avg_LLM_loss_on_V_on_val = avg_LLM_loss_on_V_on_val, min_LLM_loss_on_V_on_val = min_LLM_loss_on_V_on_val, max_LLM_loss_on_V_on_val = max_LLM_loss_on_V_on_val, approx_error_on_U = approx_error_on_U, approx_error_on_V = approx_error_on_V, approx_error_on_U_after_update = approx_error_on_U_after_update, approx_error_on_V_after_update = approx_error_on_V_after_update,  approx_value_on_U = approx_value_on_U, approx_value_on_U_after_update = approx_value_on_U_after_update, approx_value_on_V = approx_value_on_V, approx_value_on_V_after_update = approx_value_on_V_after_update,  overlap_for_subset = overlap_for_subset , avg_overlap = avg_overlap, min_overlap = min_overlap, max_overlap = max_overlap)
         #==============================================================================================================
 
@@ -1136,7 +1133,7 @@ def get_open_source_completions(data):
     # exnum = 1
 
     print("started running:")
-    question_df = {"question":[],"answers":[]}
+    question_df = {"question":[],"answers":[], "ground_truth": []}
 
     train_num = 1800 # 490 test ex
     labels = [x["answer"] for index, x in data.iterrows()]
@@ -1150,14 +1147,12 @@ def get_open_source_completions(data):
     print("val_data size = ",len(val_data))
     print("train_data size = ",len(train_data))
 
-
-
     exemplars = static_subset_selection(val_data, train_data, 5, test_data)
 
     print("while loop completed!")
 
     merged_exemplars = pd.concat(exemplars)
-    merged_exemplars.to_csv("output/static_subset_selection_llama_strategyqa.csv")
+    merged_exemplars.to_csv("output/strategyqa_mistral_7B_static_subset_selection.csv")
     
     # merged_exemplars = pd.read_csv("output/case_aquarat_exemplars.csv")
     # exemplars = [merged_exemplars[0:5],merged_exemplars[5:10],merged_exemplars[10:15],merged_exemplars[15:20],merged_exemplars[20:25],merged_exemplars[25:30],merged_exemplars[30:35],merged_exemplars[35:40],merged_exemplars[40:45],merged_exemplars[45:50]]
@@ -1171,8 +1166,6 @@ def get_open_source_completions(data):
 
     index=0
     acc_records = []
-
-
 
     for index, row in test_data.iterrows():
 
@@ -1195,9 +1188,23 @@ def get_open_source_completions(data):
 
         question_df['question'].append(row["question"])
         question_df["answers"].append(answer)
+        question_df["ground_truth"].append(ground_truth)
         final_questions = pd.DataFrame(question_df)
-        final_questions.to_csv("output/static_llama_strategyqa_question_answer.tsv",sep="\t",index=False)
+        final_questions.to_csv("output/strategyqa_mistral_7B_question_answer.tsv",sep="\t",index=False)
 
+    with open("output/strategyqa_mistral_7B_result.pickle","wb") as results_file:
+        result_dict = {}
+        result_dict["min_exemplar_error_index"] = ind
+        result_dict["min_exemplar_error"] = avg_err[ind]
+        result_dict["matches"] = matches
+        result_dict["mismatches"] = mismatches
+        result_dict["EM"] = matches/(matches+mismatches)
+        result_dict["val_data_len"] = len(val_data)
+        result_dict["train_data_len"] = len(train_data)
+        result_dict["test_data_len"] = len(test_data)
+        pickle.dump(result_dict, results_file)
+
+    exemplars.to_csv("output/strategyqa_mistral_7B_selected_exemplar.csv")
 
     print("EM:",matches/(matches+mismatches))
 

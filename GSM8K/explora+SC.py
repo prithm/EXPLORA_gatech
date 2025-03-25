@@ -1037,8 +1037,9 @@ def get_open_source_completions(test_data, data):
 
     print("EM:", matches/(matches+mismatches))
 
-    with open("output/result.pickle","wb") as results_file:
+    with open("output/hotpotqa_mistral_7B_result.pickle","wb") as results_file:
         result_dict = {}
+        result_dict["min_exemplar_error_index"] = ind
         result_dict["min_exemplar_error"] = avg_err[ind]
         result_dict["matches"] = matches
         result_dict["mismatches"] = mismatches
@@ -1067,4 +1068,12 @@ def test_few_shot_prediction():
 
 
 if __name__=='__main__':
-    test_few_shot_prediction()
+    train_set = pd.read_csv("datasets/GSM8K/gsm8k_train.csv")
+
+    with open("datasets/GSM8K/gsm8k_test.jsonl", 'r') as f:
+        json_list = list(f)
+    test_set = [json.loads(x) for x in json_list]
+
+    print(len(train_set))
+    print(len(test_set))
+    # test_few_shot_prediction()
