@@ -967,12 +967,11 @@ def static_subset_selection(val_data, train_data, k, test_data):
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 def get_open_source_completions(test_data, data):
-
     # stop_signal = "\n\n"
     matches = 0
     mismatches = 0
 
-    question_df = {"question":[],"answers":[]}
+    question_df = {"question":[],"answers":[], "ground_truth": []}
     
     train_data, val_data = train_test_split(data, test_size=0.3, random_state=42)
 
@@ -993,6 +992,7 @@ def get_open_source_completions(test_data, data):
     ind = np.argmin(avg_err)
     print("\n\nMin index:",ind)
     exemplars = exemplars[ind]
+    exemplars.to_csv("output/static_subset_selection_mistral3_selected_exemplar.csv")
 
     index=0
     acc_records = []
@@ -1028,6 +1028,7 @@ def get_open_source_completions(test_data, data):
 
         question_df['question'].append(row["question"])
         question_df["answers"].append(answer)
+        question_df["ground_truth"].append(ground_truth)
         final_questions = pd.DataFrame(question_df)
         final_questions.to_csv("output/static_mistral_question_answer.tsv",sep="\t",index=False)
 
@@ -1035,6 +1036,14 @@ def get_open_source_completions(test_data, data):
         exnum += 1
 
     print("EM:", matches/(matches+mismatches))
+
+    with open("output/result.pickle","wb") as results_file:
+        result_dict = {}
+        result_dict["min_exemplar_error"] = avg_err[ind]
+        result_dict["matches"] = matches
+        result_dict["mismatches"] = mismatches
+        result_dict["EM"] = matches/(matches+mismatches)
+        pickle.dump(result_dict, results_file)
 
     return final_questions
 
