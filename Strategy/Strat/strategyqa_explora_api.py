@@ -1241,19 +1241,18 @@ def get_open_source_completions(data):
         final_questions = pd.DataFrame(question_df)
         final_questions.to_csv("output/strategyqa_mistral_7B_question_answer.tsv",sep="\t",index=False)
 
-    with open("output/strategyqa_mistral_7B_result.pickle","wb") as results_file:
-        result_dict = {}
-        result_dict["min_exemplar_error_index"] = ind
-        result_dict["min_exemplar_error"] = avg_err[ind]
-        result_dict["matches"] = matches
-        result_dict["mismatches"] = mismatches
-        result_dict["EM"] = matches/(matches+mismatches)
-        result_dict["val_data_len"] = len(val_data)
-        result_dict["train_data_len"] = len(train_data)
-        result_dict["test_data_len"] = len(test_data)
-        pickle.dump(result_dict, results_file)
-
     exemplars.to_csv("output/strategyqa_mistral_7B_selected_exemplar.csv")
+
+    result_dict = {}
+    result_dict["min_exemplar_error_index"] = [ind]
+    result_dict["min_exemplar_error"] = [avg_err[ind]]
+    result_dict["matches"] = [matches]
+    result_dict["mismatches"] = [mismatches]
+    result_dict["EM"] = [matches/(matches+mismatches)]
+    result_dict["val_data_len"] = [len(val_data)]
+    result_dict["train_data_len"] = [len(train_data)]
+    result_dict["test_data_len"] = [len(test_data)]
+    result_dict.to_csv("output/strategyqa_mistral_7B_result_summary.csv")
 
     print("EM:",matches/(matches+mismatches))
 
