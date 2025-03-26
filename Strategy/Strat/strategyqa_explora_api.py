@@ -55,10 +55,11 @@ def get_completion(msg_in):
     prompt = msg_in
     #prompt = pipeline.tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
     outputs = pipeline(prompt, max_new_tokens=256, do_sample=True, num_return_sequences=10, temperature=0.5, top_k=10, top_p=1.0)
-    print("OUTPUTS", outputs)
+    # print("OUTPUTS", outputs)
     out_text = []
     for x in range(0, 10):
         out_text.append(outputs[x]["generated_text"])
+        # print(out_text)
     return out_text
 
 
