@@ -1,5 +1,5 @@
 import numpy as np
-import openai
+# import openai
 import pandas as pd
 from tqdm import tqdm
 from sklearn.metrics.pairwise import cosine_similarity
@@ -11,9 +11,8 @@ import random
 import pickle 
 from sklearn.model_selection import train_test_split
 import transformers
-# import os
-# from transformers import AutoModelForCausalLM, AutoModelForSeq2SeqLM, AutoTokenizer
-from transformers import GPT2TokenizerFast, BertTokenizer, BertModel, logging
+import os
+from transformers import AutoModelForCausalLM, AutoTokenizer, BertTokenizer, BertModel, logging
 
 tokenizer_bert = BertTokenizer.from_pretrained('bert-base-uncased')
 model_bert = BertModel.from_pretrained('bert-base-uncased')
@@ -64,28 +63,28 @@ def get_completion(msg_in):
 
 
 #####################################################################################################
-system_message = """The following is a conversation between a Human and an AI Assistant.
-The assistant is helpful, respectful and honest, and it always answers as helpfully as possible, while being safe.
-The Assistant's answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content.
-Please ensure that the Assistant's responses are socially unbiased and positive in nature.
-If a question by the human does not make any sense, or is not factually coherent, the Assistant should explain why instead of answering something not correct.
-If the Assistant does not know the answer to a question, please don't share false information.
-####
+# system_message = """The following is a conversation between a Human and an AI Assistant.
+# The assistant is helpful, respectful and honest, and it always answers as helpfully as possible, while being safe.
+# The Assistant's answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content.
+# Please ensure that the Assistant's responses are socially unbiased and positive in nature.
+# If a question by the human does not make any sense, or is not factually coherent, the Assistant should explain why instead of answering something not correct.
+# If the Assistant does not know the answer to a question, please don't share false information.
+# ####
 
-"""
-api_keys = ["EMPTY"]
-endpoint_urls = ["https://a37017d2bb74.ngrok.app"]
-llm_names = []
+# """
+# api_keys = ["EMPTY"]
+# endpoint_urls = ["https://a37017d2bb74.ngrok.app"]
+# llm_names = []
 
-for api_key, endpoint_url in zip(api_keys, endpoint_urls):
-    if 'hf.space' in endpoint_url:
-        model_name = endpoint_url.replace('https://', '').replace('.hf.space', '').replace('/', '')
-    else:
-        openai.api_key = api_key
-        openai.api_base = f"{endpoint_url}/v1"
-        model_names = openai.Model.list()
-        model_name = model_names["data"][0]["id"]
-    llm_names.append(model_name)
+# for api_key, endpoint_url in zip(api_keys, endpoint_urls):
+#     if 'hf.space' in endpoint_url:
+#         model_name = endpoint_url.replace('https://', '').replace('.hf.space', '').replace('/', '')
+#     else:
+#         openai.api_key = api_key
+#         openai.api_base = f"{endpoint_url}/v1"
+#         model_names = openai.Model.list()
+#         model_name = model_names["data"][0]["id"]
+#     llm_names.append(model_name)
 
 
 
@@ -129,11 +128,12 @@ for api_key, endpoint_url in zip(api_keys, endpoint_urls):
 def llm_output(user_query, hard_code_exception=False):
     # results = get_completion(user_query, api_keys[0], endpoint_urls[0], hard_code_exception=hard_code_exception)
     results = get_completion(user_query)
-    return results
+    # print("results", results)
+    return results[0]
 
 
 def read_strategyqa():
-    with open('../data/StrategyQA/strategyqa_train.json', encoding='utf-8') as f:
+    with open('Strategy/data/StrategyQA/strategyqa_train.json', encoding='utf-8') as f:
         data = json.load(f)
     examples = []
     for d in data:
@@ -219,6 +219,44 @@ def prompt_for_manual_prediction(ex, shots):
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# def LLM_avg_error2(exemplars_set, val_data):
+#     # stop_signal = "\n\n"
+#     error=[]
+#     # increment error if model predicted answer is not equal to the ground truth answer for the test question by passing the exemplars
+#     for exemplars in tqdm(exemplars_set,total=len(exemplars_set),desc="LLM Loss Fn Exemplar"):
+#         matches = 0
+#         mismatches = 0
+#         exnum = 0
+#         # acc_records = []
+#         for index, row in val_data.iterrows():
+#             prompt = prompt_for_manual_prediction(row, exemplars)
+#             tmp_list = llm_output(prompt)
+
+#             n = self_con(tmp_list)
+    
+#             ground_truth = int(clean_ans(row["answer"]))
+
+#             answer = ""
+#             maxf = 0
+#             if len(n)==0: answer=""
+#             else: maxf = n[0][1]
+
+#             for z in n:
+#                 if z[1]==maxf:
+#                     if ground_truth==z[0]:
+#                         answer = z[0]
+
+#             if answer=="": 
+#                 mismatches += 1
+#                 if len(n)>0: answer = n[0][0]
+#             else: matches += 1           
+            
+#             exnum+=1
+
+#         error.append(mismatches/exnum)
+
+#     return error
+
 def LLM_avg_error(exemplars_set, val_data):
     stop_signal = "\n\n"
     error=[]
@@ -232,6 +270,7 @@ def LLM_avg_error(exemplars_set, val_data):
             #chain_answer = safe_completion(prompt=prompt, max_tokens=_MAX_TOKENS, stop=stop_signal, temp=0.0, logprobs=5)
 
             tmp = llm_output(prompt)
+            # print("tmp", tmp)
 
             answer = ""
             if len(tmp.split("The answer is:"))>1:
@@ -290,20 +329,28 @@ def static_subset_selection(val_data, train_data, k, test_data):
 
     val_data = val_data[:20]
 
-    # dbfile3 = open('../data/AQUA_RAT/aquarat_train_emb.pkl', 'rb')    
+    # dbfile3 = open('Strategy/data/AQUA_RAT/aquarat_train_emb.pkl', 'rb')    
     # train_emb = pickle.load(dbfile3)
 
     #Calculate embeddings for all validation questions
-    val_emb = get_embeddings1(val_data["question"].tolist())
-    with open("../data/StrategyQA/strategy_val_emb.pkl", 'wb') as f:
-            pickle.dump(val_emb, f)
+
+    with open("Strategy/data/StrategyQA/strategy_val_emb.pkl", 'rb') as f:
+        val_emb = pickle.load(f)
     print("Valiation embeddings calculated")
 
-
-    train_emb = get_embeddings1(train_data["question"].tolist())
-    with open("../data/StrategyQA/strategy_train_emb.pkl", 'wb') as f:
-            pickle.dump(train_emb, f)
+    with open("Strategy/data/StrategyQA/strategy_train_emb.pkl", 'rb') as f:
+        train_emb = pickle.load(f)
     print("Train embeddings calculated")
+
+    # val_emb = get_embeddings1(val_data["question"].tolist())
+    # with open("Strategy/data/StrategyQA/strategy_val_emb.pkl", 'wb') as f:
+    #     pickle.dump(val_emb, f)
+    # print("Valiation embeddings calculated")
+
+    # train_emb = get_embeddings1(train_data["question"].tolist())
+    # with open("Strategy/data/StrategyQA/strategy_train_emb.pkl", 'wb') as f:
+    #     pickle.dump(train_emb, f)
+    # print("Train embeddings calculated")
 
     # k-means clustering on train_data with k=5
     kmeans = KMeans(n_clusters=5, random_state=0).fit(train_emb)
@@ -1146,6 +1193,7 @@ def get_open_source_completions(data):
     val_data, train_data, _, _ = train_test_split(train_split, labels, train_size=val_size, stratify=labels, random_state=7)
     print("val_data size = ",len(val_data))
     print("train_data size = ",len(train_data))
+    print("test_data size = ",len(test_data))
 
     exemplars = static_subset_selection(val_data, train_data, 5, test_data)
 
