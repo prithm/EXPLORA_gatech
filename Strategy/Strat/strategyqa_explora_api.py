@@ -134,7 +134,7 @@ def llm_output(user_query, hard_code_exception=False):
 
 
 def read_strategyqa():
-    with open('Strategy/data/StrategyQA/strategyqa_train.json', encoding='utf-8') as f:
+    with open('datasets/Strategyqa/strategyqa_train.json', encoding='utf-8') as f:
         data = json.load(f)
     examples = []
     for d in data:
@@ -335,11 +335,11 @@ def static_subset_selection(val_data, train_data, k, test_data):
 
     #Calculate embeddings for all validation questions
 
-    with open("Strategy/data/StrategyQA/strategy_val_emb.pkl", 'rb') as f:
+    with open("datasets/Strategyqa/strategy_qa_embeddings/strategy_val_emb.pkl", 'rb') as f:
         val_emb = pickle.load(f)
     print("Valiation embeddings calculated")
 
-    with open("Strategy/data/StrategyQA/strategy_train_emb.pkl", 'rb') as f:
+    with open("datasets/Strategyqa/strategy_qa_embeddings/strategy_train_emb.pkl", 'rb') as f:
         train_emb = pickle.load(f)
     print("Train embeddings calculated")
 

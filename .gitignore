@@ -3,3 +3,4 @@ Strategy/data/StrategyQA/
 datasets/GSM8K/embeddings/
 loss_folder.npz
 output/
+datasets/*/*embeddings*
