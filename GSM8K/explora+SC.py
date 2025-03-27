@@ -982,7 +982,7 @@ def get_open_source_completions(test_data, data):
     print("*************Finished static subset selection*************")
 
     merged_exemplars = pd.concat(exemplars)
-    merged_exemplars.to_csv("output/static_subset_selection_mistral3.csv")
+    merged_exemplars.to_csv("output/gsm8k_static_subset_selection_mistral3.csv")
     # exemplars = pd.read_csv("output/static_subset_selection_llama2.csv")
     
     print("\n\n\n********************Take the exemplar with minimum validation loss and use it as the exemplar")
@@ -992,7 +992,6 @@ def get_open_source_completions(test_data, data):
     ind = np.argmin(avg_err)
     print("\n\nMin index:",ind)
     exemplars = exemplars[ind]
-    exemplars.to_csv("output/static_subset_selection_mistral3_selected_exemplar.csv")
 
     index=0
     acc_records = []
@@ -1030,21 +1029,23 @@ def get_open_source_completions(test_data, data):
         question_df["answers"].append(answer)
         question_df["ground_truth"].append(ground_truth)
         final_questions = pd.DataFrame(question_df)
-        final_questions.to_csv("output/static_mistral_question_answer.tsv",sep="\t",index=False)
+        final_questions.to_csv("output/gsm8k_static_mistral_question_answer.tsv",sep="\t",index=False)
 
         print("Accuracy:", matches/exnum)
         exnum += 1
 
     print("EM:", matches/(matches+mismatches))
 
-    with open("output/hotpotqa_mistral_7B_result.pickle","wb") as results_file:
-        result_dict = {}
-        result_dict["min_exemplar_error_index"] = ind
-        result_dict["min_exemplar_error"] = avg_err[ind]
-        result_dict["matches"] = matches
-        result_dict["mismatches"] = mismatches
-        result_dict["EM"] = matches/(matches+mismatches)
-        pickle.dump(result_dict, results_file)
+    result_dict = {}
+    result_dict["min_exemplar_error_index"] = [ind]
+    result_dict["min_exemplar_error"] = [avg_err[ind]]
+    result_dict["matches"] = [matches]
+    result_dict["mismatches"] = [mismatches]
+    result_dict["EM"] = [matches/(matches+mismatches)]
+    result_dict["val_data_len"] = [len(val_data)]
+    result_dict["train_data_len"] = [len(train_data)]
+    result_dict["test_data_len"] = [len(test_data)]
+    result_dict.to_csv("output/gsm8k_mistral_7B_result_summary.csv")
 
     return final_questions
 

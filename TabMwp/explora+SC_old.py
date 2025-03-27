@@ -1,6 +1,6 @@
-from huggingface_hub import login
-access_token_read = "YOUR TOKEN"
-login(token = access_token_read)
+# from huggingface_hub import login
+# access_token_read = "YOUR TOKEN"
+# login(token = access_token_read)
 
 import numpy as np
 from numpy import linalg
@@ -1007,15 +1007,15 @@ def get_open_source_completions(test_data, data):
     train_emb_dict = {}
 
     # Open pickled embeddings
-    with open('pickle_test.pkl', 'rb') as f:
+    with open('datasets/tabmwp/tabmwp_embeddings/pickle_test.pkl', 'rb') as f:
         te = pickle.load(f)
     
-    with open('pickle_train_new.pkl', 'rb') as f1:
+    with open('datasets/tabmwp/tabmwp_embeddings/pickle_train_new.pkl', 'rb') as f1:
         tr = pickle.load(f1)
     
     # Map embeddings from dataset ----- json to dict
     k = 0
-    dev_set1 = open("problems_dev.json")
+    dev_set1 = open("datasets/tabmwp/problems_dev.json")
     dev_set1 = json.load(dev_set1)
     dev_set1 = dict(list(dev_set1.items())) #7686
     k = 0
@@ -1023,7 +1023,7 @@ def get_open_source_completions(test_data, data):
         test_emb_dict[i] = te[k]
         k+=1
 
-    train_set1 = open("problems_train.json")
+    train_set1 = open("datasets/tabmwp/problems_train.json")
     train_set1 = json.load(train_set1)
     train_set1 = dict(list(train_set1.items())) #23059
     k = 0
@@ -1041,7 +1041,7 @@ def get_open_source_completions(test_data, data):
     print("*************Finished static subset selection*************")
 
     merged_exemplars = pd.concat(exemplars)
-    merged_exemplars.to_csv("output/static_subset_selection_mistral.csv")
+    merged_exemplars.to_csv("output/tabmwp_static_subset_selection_mistral.csv")
     
     print("\n\n\n********************Take the exemplar with minimum validation loss and use it as the exemplar")
     val_data = val_data[:20]
@@ -1063,7 +1063,7 @@ def get_open_source_completions(test_data, data):
         question_df['question'].append(row["question"])
         question_df["answers"].append(answer)
         final_questions = pd.DataFrame(question_df)
-        final_questions.to_csv("output/static_mistral_question_answer_latest.tsv",sep="\t",index=False)
+        final_questions.to_csv("output/tabmwp_static_mistral_question_answer_latest.tsv",sep="\t",index=False)
 
         ground_truth = row["answer"]
 
@@ -1077,6 +1077,19 @@ def get_open_source_completions(test_data, data):
 
     print("EM:", matches/(matches+mismatches))
 
+    exemplars.to_csv("output/tabmwp_static_subset_selection_mistral3_selected_exemplar.csv")
+    
+    result_dict = {}
+    result_dict["min_exemplar_error_index"] = [ind]
+    result_dict["min_exemplar_error"] = [avg_err[ind]]
+    result_dict["matches"] = [matches]
+    result_dict["mismatches"] = [mismatches]
+    result_dict["EM"] = [matches/(matches+mismatches)]
+    result_dict["val_data_len"] = [len(val_data)]
+    result_dict["train_data_len"] = [len(train_data)]
+    result_dict["test_data_len"] = [len(test_data)]
+    result_dict.to_csv("output/tabmwp_mistral_7B_result_summary.csv")
+
     return final_questions
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1085,11 +1098,11 @@ def test_few_shot_prediction():
 
     # ADVHOTPOT train dataset
     # train_data = read_AHOTPOT_train_data()
-    train_data = pd.read_json('problems_train.json', orient='index')
+    train_data = pd.read_json('datasets/tabmwp/problems_train.json', orient='index')
 
     # ADVHOTPOT test dataset
     # test_data = read_AHOTPOT_test_data()
-    test_data = pd.read_json('problems_dev.json', orient='index')
+    test_data = pd.read_json('datasets/tabmwp/problems_dev.json', orient='index')
 
     final_df = get_open_source_completions(test_data, train_data)
     print(final_df)

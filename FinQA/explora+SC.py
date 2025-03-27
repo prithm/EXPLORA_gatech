@@ -27,9 +27,9 @@ else:
 
 
 
-from huggingface_hub import login
-access_token_read = "YOUR_TOKEN"
-login(token = access_token_read)
+# from huggingface_hub import login
+# access_token_read = "YOUR_TOKEN"
+# login(token = access_token_read)
 
 #import numpy as np
 from numpy import linalg
@@ -210,12 +210,12 @@ logging.set_verbosity_error()
 ######################################################################################################
 
 def read_AHOTPOT_test_data():
-    data = pd.read_csv("finqa_test.csv")
+    data = pd.read_csv("datasets/FinQA/finqa_test.csv")
     return data
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 def read_AHOTPOT_train_data():
-    data = pd.read_csv("finqa_train.csv")
+    data = pd.read_csv("datasets/FinQA/finqa_train.csv")
     return data
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -566,9 +566,16 @@ def static_subset_selection(val_data, train_data, k, test_data):
     # transfer_emb = pickle.load(dbfile3)
 
     #Calculate embeddings for all validation questions
-    val_emb = get_embeddings1(val_data["question"].tolist())
-    with open("val_emb.pkl", 'wb') as f:
-            pickle.dump(val_emb, f)
+
+    with open('datasets/FinQA/finqa_embeddings/val_emb.pkl', 'rb') as f:
+        val_emb = pickle.load(f)
+    
+    with open('datasets/FinQA/finqa_embeddings/transfer_emb.pkl', 'rb') as f1:
+        transfer_emb = pickle.load(f1)
+
+    # val_emb = get_embeddings1(val_data["question"].tolist())
+    # with open("val_emb.pkl", 'wb') as f:
+    #         pickle.dump(val_emb, f)
     
     # print("1-done")
     # test_emb = get_embeddings1(test_data["question"].tolist())
@@ -576,10 +583,10 @@ def static_subset_selection(val_data, train_data, k, test_data):
     #         pickle.dump(test_emb, f)
 
     # print("2-done")
-    transfer_emb = get_embeddings1(train_data["question"].tolist())
-    with open("transfer_emb.pkl", 'wb') as f:
-            pickle.dump(transfer_emb, f)
-    print("3-done")
+    # transfer_emb = get_embeddings1(train_data["question"].tolist())
+    # with open("transfer_emb.pkl", 'wb') as f:
+    #         pickle.dump(transfer_emb, f)
+    # print("3-done")
 
 
     # k-means clustering on train_data with k=5
@@ -1420,7 +1427,7 @@ def get_open_source_completions(test_data, data):
     # exemplars=np.array_split(merged_exemplars, 10)
 
     merged_exemplars = pd.concat(exemplars)
-    merged_exemplars.to_csv("static_subset_selection_mistral_finqa_latest.csv")
+    merged_exemplars.to_csv("output/finqa_static_subset_selection_mistral_finqa_latest.csv")
     
     #*****************************************************************************
     print("\n\n\n_____________Take the exemplar with minimum validation loss and use it as the exemplar")
@@ -1475,6 +1482,19 @@ def get_open_source_completions(test_data, data):
           mismatches+=1
         print("Accuracy till now:",matches/(matches+mismatches))
     print("EM:",matches/(matches+mismatches))
+
+    exemplars.to_csv("output/finqa_static_subset_selection_mistral3_selected_exemplar.csv")
+    
+    result_dict = {}
+    result_dict["min_exemplar_error_index"] = [ind]
+    result_dict["min_exemplar_error"] = [avg_err[ind]]
+    result_dict["matches"] = [matches]
+    result_dict["mismatches"] = [mismatches]
+    result_dict["EM"] = [matches/(matches+mismatches)]
+    result_dict["val_data_len"] = [len(val_data)]
+    result_dict["train_data_len"] = [len(train_data)]
+    result_dict["test_data_len"] = [len(test_data)]
+    result_dict.to_csv("output/finqa_mistral_7B_result_summary.csv")
 
     return final_questions
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
