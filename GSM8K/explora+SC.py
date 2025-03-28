@@ -997,6 +997,9 @@ def get_open_source_completions(test_data, data):
     acc_records = []
     exnum = 1
 
+
+    exemplars.to_csv("output/gsm8k_static_subset_selection_mistral3_selected_exemplar.csv")
+
     for row in tqdm(test_data,total=len(test_data),desc="Generating"):
 
         prompt = prompt_for_manual_prediction(row, exemplars)
@@ -1022,17 +1025,18 @@ def get_open_source_completions(test_data, data):
             if len(n)>0: answer = n[0][0]
         else: matches += 1
         
-        print("\nAnswer:", answer)
-        print("Ground Truth:", ground_truth)
+        # print("\nAnswer:", answer)
+        # print("Ground Truth:", ground_truth)
 
         question_df['question'].append(row["question"])
         question_df["answers"].append(answer)
         question_df["ground_truth"].append(ground_truth)
-        final_questions = pd.DataFrame(question_df)
-        final_questions.to_csv("output/gsm8k_static_mistral_question_answer.tsv",sep="\t",index=False)
 
-        print("Accuracy:", matches/exnum)
+        # print("Accuracy:", matches/exnum)
         exnum += 1
+
+    final_questions = pd.DataFrame(question_df)
+    final_questions.to_csv("output/gsm8k_static_mistral_question_answer.tsv",sep="\t",index=False)
 
     print("EM:", matches/(matches+mismatches))
 
@@ -1065,7 +1069,7 @@ def test_few_shot_prediction():
     test_set = [json.loads(x) for x in json_list]
 
     final_df = get_open_source_completions(test_set, train_set)
-    print(final_df)
+    # print(final_df)
 
 
 if __name__=='__main__':
@@ -1077,4 +1081,4 @@ if __name__=='__main__':
 
     print(len(train_set))
     print(len(test_set))
-    # test_few_shot_prediction()
+    test_few_shot_prediction()

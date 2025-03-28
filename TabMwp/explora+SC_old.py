@@ -999,8 +999,6 @@ def get_open_source_completions(test_data, data):
     matches = 0
     mismatches = 0
 
-    question_df = {"question":[],"answers":[]}
-
     train_data, val_data = train_test_split(data, test_size=0.3, random_state=42)
 
     test_emb_dict = {}
@@ -1054,21 +1052,22 @@ def get_open_source_completions(test_data, data):
     index=0
     acc_records = []
 
-    for index, row in test_data.iterrows():
-        # if(index==3):
-        #     break
+    exemplars.to_csv("output/tabmwp_static_subset_selection_mistral3_selected_exemplar.csv")
+
+    question_df = {"question":[],"answers":[]}
+    for index, row in tqdm(test_data.iterrows(), total=len(test_data)):
+        # if index%500 == 0:
+        #     print("Test", index)
 
         prompt = prompt_for_manual_prediction(row, exemplars)
         answer = llm_output(prompt)
         question_df['question'].append(row["question"])
         question_df["answers"].append(answer)
-        final_questions = pd.DataFrame(question_df)
-        final_questions.to_csv("output/tabmwp_static_mistral_question_answer_latest.tsv",sep="\t",index=False)
 
         ground_truth = row["answer"]
 
-        print("\nGen Answer:", answer)
-        print("Ground Truth:", ground_truth)
+        # print("\nGen Answer:", answer)
+        # print("Ground Truth:", ground_truth)
 
         if answer!="" and (ground_truth.lower() in answer.lower() or answer.lower() in ground_truth.lower()):
             matches+=1
@@ -1076,8 +1075,9 @@ def get_open_source_completions(test_data, data):
             mismatches+=1
 
     print("EM:", matches/(matches+mismatches))
-
-    exemplars.to_csv("output/tabmwp_static_subset_selection_mistral3_selected_exemplar.csv")
+    
+    final_questions = pd.DataFrame(question_df)
+    final_questions.to_csv("output/tabmwp_static_mistral_question_answer_latest.tsv",sep="\t",index=False)
     
     result_dict = {}
     result_dict["min_exemplar_error_index"] = [ind]

@@ -1415,8 +1415,6 @@ def get_open_source_completions(test_data, data):
     mismatches =0
     print("started running:")
 
-    question_df = {"question":[],"answers":[]}
-
     train_data, val_data = train_test_split(data, test_size=0.3, random_state=42)
     val_data=val_data[:20]
 
@@ -1440,7 +1438,10 @@ def get_open_source_completions(test_data, data):
     index=0
     acc_records = []
 
-    for index, row in test_data.iterrows():
+    exemplars.to_csv("output/finqa_static_subset_selection_mistral3_selected_exemplar.csv")
+
+    question_df = {"question":[],"answers":[]}
+    for index, row in tqdm(test_data.iterrows(), total=len(test_data)):
 
         tmp_list = in_context_manual_prediction(row,exemplars)
         #print(tmp[0])
@@ -1452,7 +1453,7 @@ def get_open_source_completions(test_data, data):
         #     ans = tmp[0].split("The option is ")[1][0]
         # answer=ans
         
-        print("\nAnswer: ", answer)
+        # print("\nAnswer: ", answer)
         gt = row["answer"]
         ans=gt
         try:
@@ -1473,17 +1474,21 @@ def get_open_source_completions(test_data, data):
         if type(ans)==float:
             #print("**")
             ans=round(ans,2)
-        gt =ans
-        print("GT: ", gt)
+        gt=ans
+        # print("GT: ", gt)
         
         if(answer==gt):
           matches+=1
         else:
           mismatches+=1
-        print("Accuracy till now:",matches/(matches+mismatches))
+        # print("Accuracy till now:",matches/(matches+mismatches))
+        
+        question_df['question'].append(row["question"])
+        question_df["answers"].append(answer)
     print("EM:",matches/(matches+mismatches))
 
-    exemplars.to_csv("output/finqa_static_subset_selection_mistral3_selected_exemplar.csv")
+    final_questions = pd.DataFrame(question_df)
+    final_questions.to_csv("output/finqa_mistral_7B_question_answer.tsv",sep="\t",index=False)
     
     result_dict = {}
     result_dict["min_exemplar_error_index"] = [ind]

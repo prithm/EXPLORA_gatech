@@ -1181,7 +1181,6 @@ def get_open_source_completions(data):
     # exnum = 1
 
     print("started running:")
-    question_df = {"question":[],"answers":[], "ground_truth": []}
 
     train_num = 1800 # 490 test ex
     labels = [x["answer"] for index, x in data.iterrows()]
@@ -1216,7 +1215,10 @@ def get_open_source_completions(data):
     index=0
     acc_records = []
 
-    for index, row in test_data.iterrows():
+    exemplars.to_csv("output/strategyqa_mistral_7B_selected_exemplar.csv")
+
+    question_df = {"question":[],"answers":[], "ground_truth": []}
+    for index, row in tqdm(test_data.iterrows(), total=len(test_data)):
 
         prompt = prompt_for_manual_prediction(row, exemplars)
         tmp = llm_output(prompt)
@@ -1226,8 +1228,8 @@ def get_open_source_completions(data):
             answer = tmp.split("The answer is:")[1]
             answer = answer.split("\n")[0]
 
-        print("\nAnswer: ", answer)
-        print("GT: ", row["answer"])
+        # print("\nAnswer: ", answer)
+        # print("GT: ", row["answer"])
         ground_truth = row["answer"]
         
         if ground_truth.lower() in answer.lower() or answer.lower() in ground_truth.lower():
@@ -1238,10 +1240,9 @@ def get_open_source_completions(data):
         question_df['question'].append(row["question"])
         question_df["answers"].append(answer)
         question_df["ground_truth"].append(ground_truth)
-        final_questions = pd.DataFrame(question_df)
-        final_questions.to_csv("output/strategyqa_mistral_7B_question_answer.tsv",sep="\t",index=False)
-
-    exemplars.to_csv("output/strategyqa_mistral_7B_selected_exemplar.csv")
+    
+    final_questions = pd.DataFrame(question_df)
+    final_questions.to_csv("output/strategyqa_mistral_7B_question_answer.tsv",sep="\t",index=False)
 
     result_dict = {}
     result_dict["min_exemplar_error_index"] = [ind]
