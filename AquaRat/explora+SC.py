@@ -374,9 +374,9 @@ def LLM_avg_error(exemplars_set, val_data):
             #     ans = tmp_list[0].split("The option is ")[6][0]
             # answer=ans
             
-            print("\nAnswer: ", answer)
+            # print("\nAnswer: ", answer)
             gt = row["correct"]
-            print("GT: ", gt)
+            # print("GT: ", gt)
             if(answer==gt):
               matches+=1
             else:
@@ -417,9 +417,9 @@ def LLM_error_indicator(exemplars_set, val_data):
             #     ans = tmp_list[0].split("The option is ")[6][0]
             # answer=ans
             
-            print("\nAnswer: ", answer)
+            # print("\nAnswer: ", answer)
             gt = row["correct"]
-            print("GT: ", gt)
+            # print("GT: ", gt)
 
             if answer==gt:
                 loss=0
@@ -1336,6 +1336,9 @@ def get_open_source_completions(test_data, data):
     index=0
     acc_records = []
 
+    exemplars.to_csv("output/aquarat_static_subset_selection_mistral3_selected_exemplar.csv")
+
+    question_df = {"question":[],"answers":[], "ground_truth": []}
     for index, row in test_data.iterrows():
 
         tmp_list = in_context_manual_prediction(row,exemplars)
@@ -1350,16 +1353,22 @@ def get_open_source_completions(test_data, data):
         #     ans = tmp[0].split("The option is ")[1][0]
         # answer=ans
         
-        print("\nAnswer: ", answer)
+        # print("\nAnswer: ", answer)
         gt = row["correct"]
-        print("GT: ", gt)
+        # print("GT: ", gt)
         if(answer==gt):
           matches+=1
         else:
           mismatches+=1
+
+        question_df['question'].append(row["question"])
+        question_df["answers"].append(answer)
+        question_df["ground_truth"].append(gt)
+
     print("EM:",matches/(matches+mismatches))
 
-    exemplars.to_csv("output/aquarat_static_subset_selection_mistral3_selected_exemplar.csv")
+    final_questions = pd.DataFrame(question_df)
+    final_questions.to_csv("output/aquarat_static_mistral_question_answer.tsv",sep="\t",index=False)
     
     result_dict = {}
     result_dict["min_exemplar_error_index"] = [ind]

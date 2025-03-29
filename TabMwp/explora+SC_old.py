@@ -1054,7 +1054,7 @@ def get_open_source_completions(test_data, data):
 
     exemplars.to_csv("output/tabmwp_static_subset_selection_mistral3_selected_exemplar.csv")
 
-    question_df = {"question":[],"answers":[]}
+    question_df = {"question":[],"answers":[],"ground_truth":[]}
     for index, row in tqdm(test_data.iterrows(), total=len(test_data)):
         # if index%500 == 0:
         #     print("Test", index)
@@ -1065,6 +1065,7 @@ def get_open_source_completions(test_data, data):
         question_df["answers"].append(answer)
 
         ground_truth = row["answer"]
+        question_df["ground_truth"].append(ground_truth)
 
         # print("\nGen Answer:", answer)
         # print("Ground Truth:", ground_truth)

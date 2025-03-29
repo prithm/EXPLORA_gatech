@@ -71,6 +71,7 @@ pipeline = transformers.pipeline(
 )
 
 tokenizer = AutoTokenizer.from_pretrained(model_name, torch_dtype=torch.float16)
+model.generation_config.pad_token_id = model.generation_config.eos_token_id
 
 def prompt_for_manual_prediction(ex, shots):
     stop_signal = "\n\n"
@@ -412,7 +413,7 @@ def LLM_avg_error(exemplars_set, val_data):
                 ans=round(ans,2)
             answer=ans
 
-            print("\nAnswer: ", answer)
+            # print("\nAnswer: ", answer)
             gt = row["answer"]
             ans=gt
             try:
@@ -434,7 +435,7 @@ def LLM_avg_error(exemplars_set, val_data):
                 #print("**")
                 ans=round(ans,2)
             gt =ans
-            print("GT: ", gt)
+            # print("GT: ", gt)
             if(answer==gt):
               matches+=1
             else:
@@ -498,7 +499,7 @@ def LLM_error_indicator(exemplars_set, val_data):
                 ans=round(ans,2)
             answer=ans
 
-            print("\nAnswer: ", answer)
+            # print("\nAnswer: ", answer)
             gt = row["answer"]
             ans=gt
             try:
@@ -520,7 +521,7 @@ def LLM_error_indicator(exemplars_set, val_data):
                 #print("**")
                 ans=round(ans,2)
             gt =ans
-            print("GT: ", gt)
+            # print("GT: ", gt)
 
             if answer==gt:
                 loss=0
@@ -1440,7 +1441,7 @@ def get_open_source_completions(test_data, data):
 
     exemplars.to_csv("output/finqa_static_subset_selection_mistral3_selected_exemplar.csv")
 
-    question_df = {"question":[],"answers":[]}
+    question_df = {"question":[],"answers":[],"ground_truth":[]}
     for index, row in tqdm(test_data.iterrows(), total=len(test_data)):
 
         tmp_list = in_context_manual_prediction(row,exemplars)
@@ -1485,6 +1486,7 @@ def get_open_source_completions(test_data, data):
         
         question_df['question'].append(row["question"])
         question_df["answers"].append(answer)
+        question_df["ground_truth"].append(gt)
     print("EM:",matches/(matches+mismatches))
 
     final_questions = pd.DataFrame(question_df)
