@@ -1323,7 +1323,7 @@ def get_open_source_completions(test_data, data):
     # exemplars=np.array_split(merged_exemplars, 10)
 
     merged_exemplars = pd.concat(exemplars)
-    merged_exemplars.to_csv("output/aquarat_static_subset_selection_Llama_aquarat_latest12.csv")
+    merged_exemplars.to_csv("output/aquarat_static_subset_selection_mistral_subset_selection.csv")
     
     #*****************************************************************************
     print("\n\n\n_____________Take the exemplar with minimum validation loss and use it as the exemplar")
