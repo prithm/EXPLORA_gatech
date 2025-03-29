@@ -42,6 +42,7 @@ pipeline = transformers.pipeline(
 )
 
 tokenizer = AutoTokenizer.from_pretrained(model_name, torch_dtype=torch.float16)
+model.generation_config.pad_token_id = model.generation_config.eos_token_id
 
 #####################################################################################################
 
@@ -1107,7 +1108,7 @@ def test_few_shot_prediction():
     test_data = pd.read_json('datasets/tabmwp/problems_dev.json', orient='index')
 
     final_df = get_open_source_completions(test_data, train_data)
-    print(final_df)
+    # print(final_df)
 
 
 if __name__=='__main__':
