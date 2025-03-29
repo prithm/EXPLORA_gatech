@@ -1254,6 +1254,7 @@ def get_open_source_completions(data):
     result_dict["train_data_len"] = [len(train_data)]
     result_dict["test_data_len"] = [len(test_data)]
     pd.DataFrame(result_dict).to_csv("output/strategyqa_mistral_7B_result_summary.csv")
+    print(result_dict)
 
     print("EM:",matches/(matches+mismatches))
 

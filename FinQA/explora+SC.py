@@ -1502,6 +1502,7 @@ def get_open_source_completions(test_data, data):
     result_dict["train_data_len"] = [len(train_data)]
     result_dict["test_data_len"] = [len(test_data)]
     pd.DataFrame(result_dict).to_csv("output/finqa_mistral_7B_result_summary.csv")
+    print(result_dict)
 
     return final_questions
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1511,12 +1512,15 @@ def test_few_shot_prediction():
 
     # ADVHOTPOT train dataset
     train_data = read_AHOTPOT_train_data()
+    train_data2, val_data = train_test_split(train_data, test_size=0.3, random_state=42)
+    print(len(train_data2))
 
     # ADVHOTPOT test dataset
     test_data = read_AHOTPOT_test_data()
+    print(len(test_data))
 
     final_df = get_open_source_completions(test_data, train_data)
-    print(final_df)
+    # print(final_df)
 
 
 if __name__=='__main__':
