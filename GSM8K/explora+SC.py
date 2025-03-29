@@ -1049,7 +1049,7 @@ def get_open_source_completions(test_data, data):
     result_dict["val_data_len"] = [len(val_data)]
     result_dict["train_data_len"] = [len(train_data)]
     result_dict["test_data_len"] = [len(test_data)]
-    result_dict.to_csv("output/gsm8k_mistral_7B_result_summary.csv")
+    pd.DataFrame(result_dict).to_csv("output/gsm8k_mistral_7B_result_summary.csv")
 
     return final_questions
 
