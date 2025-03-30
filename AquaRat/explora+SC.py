@@ -71,6 +71,7 @@ pipeline = transformers.pipeline(
 )
 
 tokenizer = AutoTokenizer.from_pretrained(model_name, torch_dtype=torch.float16)
+model.generation_config.pad_token_id = model.generation_config.eos_token_id
 
 def prompt_for_manual_prediction(ex, shots):
 
