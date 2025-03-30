@@ -12,6 +12,8 @@ from tqdm import tqdm
 import transformers
 from transformers import AutoModelForCausalLM, AutoTokenizer, BertTokenizer, BertModel, logging
 import sys
+import time
+import pynvml
 
 def get_completion(pipeline, msg_in, cot_prompt=True):
     """Generates text completion using the specified language model."""
@@ -311,6 +313,16 @@ def static_subset_selection(pipeline, val_data, train_data, k, dataset, train_em
                     X_val[x_idx * len(val_data):(x_idx + 1) * len(val_data), i] = E_val[i]
     return U
 
+def get_gpu_utilization():
+    """Returns GPU utilization percentage."""
+    try:
+        pynvml.nvmlInit()
+        handle = pynvml.nvmlDeviceGetHandleByIndex(0)
+        utilization = pynvml.nvmlDeviceGetUtilizationRates(handle)
+        return utilization.gpu
+    except Exception as e:
+        print(f"Error getting GPU utilization: {e}")
+        return ""
 
 def get_open_source_completions(dataset, model_name_prefix, pipeline, train_data, test_data):
     """Main function to get completions for a given dataset."""
@@ -349,13 +361,18 @@ def get_open_source_completions(dataset, model_name_prefix, pipeline, train_data
     # else:
     #     train_emb = get_embeddings(train_data["question"].tolist())
     #     val_emb = get_embeddings(val_data["question"].tolist())
-    
+    start_time = time.time()
     exemplars = static_subset_selection(pipeline, val_data, train_data, 5, dataset, train_emb, val_emb)
+    avg_err = llm_avg_error(pipeline, exemplars, val_data, dataset)
+    ind = np.argmin(avg_err)
+    start_time = time.time()    
+    end_time = time.time()
+    train_time = end_time - start_time
+    gpu_utilization = get_gpu_utilization()
+    
     exemplars_df = pd.concat(exemplars)
     exemplars_df.to_csv(f"output/{dataset}_{model_name_prefix}_subset_selection.csv")
 
-    avg_err = llm_avg_error(pipeline, exemplars, val_data, dataset)
-    ind = np.argmin(avg_err)
     exemplars = exemplars[ind]
     exemplars_df.to_csv(f"output/{dataset}_{model_name_prefix}_selected_exemplar.csv")
 
@@ -404,7 +421,8 @@ def get_open_source_completions(dataset, model_name_prefix, pipeline, train_data
     result_dict = {"min_exemplar_error_index": [ind], "min_exemplar_error": [avg_err[ind]], "matches": [matches],
                    "mismatches": [mismatches], "EM": [em], "val_data_len": [len(val_data)],
                    "train_data_len": [len(train_data)], "test_data_len": [len(test_data)],
-                   "model_name_prefix": [model_name_prefix], "dataset": [dataset]}
+                   "model_name_prefix": [model_name_prefix], "dataset": [dataset],
+                   "training_time": [train_time], "gpu_utilization": [gpu_utilization]}
     pd.DataFrame(result_dict).to_csv(f"output/{dataset}_{model_name_prefix}_result_summary.csv")
     print(result_dict)
     return final_questions
@@ -438,7 +456,7 @@ def run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name):
     pipeline = transformers.pipeline("text-generation", model=model_name, torch_dtype=torch_dtype, device_map="auto")
     # tokenizer_bert = BertTokenizer.from_pretrained('bert-base-uncased')
     # model_bert = BertModel.from_pretrained('bert-base-uncased').to(device)
-    logging.set_verbosity_error()
+    # logging.set_verbosity_error()
     
     dataset_name = "aquarat"  # "aquarat", "finqa", "gsm8k", "strategyqa", "tabmwp"
     if dataset_name == "aquarat":
