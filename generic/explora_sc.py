@@ -104,13 +104,13 @@ def llm_output(pipeline, user_query, dataset, cot_prompt=True):
         return results[0]
 
 
-def get_embeddings(text_list):
-    """Gets embeddings for a list of texts."""
-    inputs = tokenizer_bert(text_list, return_tensors='pt', padding=True, truncation=True).to(device)
-    with torch.no_grad():
-        outputs = model_bert(**inputs)
-    embeddings = outputs.last_hidden_state.mean(dim=1).numpy().tolist()
-    return embeddings
+# def get_embeddings(text_list):
+#     """Gets embeddings for a list of texts."""
+#     inputs = tokenizer_bert(text_list, return_tensors='pt', padding=True, truncation=True).to(device)
+#     with torch.no_grad():
+#         outputs = model_bert(**inputs)
+#     embeddings = outputs.last_hidden_state.mean(dim=1).numpy().tolist()
+#     return embeddings
 
 
 def prompt_for_manual_prediction(ex, shots, dataset):
@@ -421,7 +421,7 @@ def read_strategyqa(file_path):
         examples.append(ex)
     return pd.DataFrame(examples)
 
-def run_pipeline(model_name, model_name_prefix, dataset_name):
+def run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name):
     random.seed(7)
     np.random.seed(7)
     torch.manual_seed(7)
@@ -432,10 +432,10 @@ def run_pipeline(model_name, model_name_prefix, dataset_name):
         device = torch.device("cpu")
 
     # Model Configuration
-    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16).to(device)
-    # tokenizer = AutoTokenizer.from_pretrained(model_name, torch_dtype=torch.float16)
+    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch_dtype).to(device)
+    # tokenizer = AutoTokenizer.from_pretrained(model_name, torch_dtype=torch_dtype)
     model.generation_config.pad_token_id = model.generation_config.eos_token_id
-    pipeline = transformers.pipeline("text-generation", model=model_name, torch_dtype=torch.float16, device_map="auto")
+    pipeline = transformers.pipeline("text-generation", model=model_name, torch_dtype=torch_dtype, device_map="auto")
     # tokenizer_bert = BertTokenizer.from_pretrained('bert-base-uncased')
     # model_bert = BertModel.from_pretrained('bert-base-uncased').to(device)
     logging.set_verbosity_error()
@@ -472,9 +472,28 @@ def run_pipeline(model_name, model_name_prefix, dataset_name):
 
 
 if __name__ == '__main__':
+     # "mistral7b_16", "mistral7b_32", "llama3b_16", "llama3b_32", "llama1b_16", "llama1b_32"
+    model_name_prefix = sys.argv[1]
+    # "aquarat", "finqa", "gsm8k", "strategyqa", "tabmwp"
+    dataset_name = sys.argv[2]
+    
+    torch_dtype=torch.float16
     model_name = ""
-    model_name_prefix = sys.argv[1] # "mistral7b"
-    if model_name_prefix == "mistal7b":
+    
+    if model_name_prefix.startswith("mistal7b"):
         model_name = "mistralai/Mistral-7B-Instruct-v0.1"
-    dataset_name = sys.argv[2]  # "aquarat", "finqa", "gsm8k", "strategyqa", "tabmwp"
-    run_pipeline(model_name, model_name_prefix, dataset_name)
+    elif model_name_prefix.startswith("llama3b"):
+        model_name = "meta-llama/Llama-3.2-3B-Instruct"
+    elif model_name_prefix.startswith("llama1b"):
+        model_name = "meta-llama/Llama-3.2-1B-Instruct"
+    else:
+        raise ValueError(f"Invalid dataset name: {model_name_prefix}")
+    
+    if model_name_prefix.split("_")[-1] == 16:
+        torch_dtype=torch.float16
+    elif model_name_prefix.split("_")[-1] == 32:
+        torch_dtype=torch.float32
+    else:
+        raise ValueError(f"Invalid dataset name: {model_name_prefix}")
+
+    run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name)
