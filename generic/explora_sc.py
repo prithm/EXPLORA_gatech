@@ -32,6 +32,48 @@ def get_completion(pipeline, msg_in, cot_prompt=True):
     out_text = [output["generated_text"] for output in outputs]
     return out_text
 
+def get_batch_completion(pipeline, msg_in_list, cot_prompt=True):
+    """Generates batch text completions using the specified language model."""
+
+    all_messages = []
+    for msg_in in msg_in_list:
+        messages = [{"role": "user", "content": "You are a helpful, respectful and honest assistant helping to solve math word problems or tasks requiring reasoning or math, use the Chain-of-Thought methodology by following given examples to explain your step-by-step calculations or logic. Do not generate examples in your answer."},
+                    {"role": "assistant", "content": "I understand."},
+                    {"role": "user", "content": msg_in}]
+        all_messages.append(messages)
+
+    if cot_prompt:
+        prompts = [pipeline.tokenizer.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True) for msgs in all_messages]
+    else:
+        prompts = msg_in_list
+
+    outputs = pipeline(prompts, max_new_tokens=256, do_sample=True, num_return_sequences=10, temperature=0.5, top_k=10,
+                     top_p=1.0)
+
+    out_texts = []
+    for batch_output in outputs:
+        out_text = [output["generated_text"] for output in batch_output]
+        out_texts.append(out_text)
+
+    return out_texts
+
+def llm_batch_output(pipeline, user_queries, dataset, cot_prompt=True):
+    """Generates LLM output and applies self-consistency."""
+
+    results = get_batch_completion(pipeline, user_queries, cot_prompt)
+    final_results = []
+    if dataset in ["aquarat", "finqa", "gsm8k", "strategyqa", "tabmwp"]:
+        for result in results:
+            res = self_con(result, dataset)
+            if len(res) == 0:
+                return ""
+            answer = res[0][0]
+            if answer == "" and len(res) > 1:
+                answer = res[1][0]
+            final_results.append(answer)
+            
+    return final_results
+
 
 def self_con(tmp_list, dataset):
     """Applies self-consistency to the generated answers."""
@@ -324,7 +366,7 @@ def get_gpu_utilization():
         print(f"Error getting GPU utilization: {e}")
         return ""
 
-def get_open_source_completions(dataset, model_name_prefix, pipeline, train_data, test_data):
+def get_open_source_completions(dataset_name, model_name_prefix, pipeline, train_data, test_data, mode, batch_size=8):
     """Main function to get completions for a given dataset."""
 
     train_emb_file = ""
@@ -352,79 +394,131 @@ def get_open_source_completions(dataset, model_name_prefix, pipeline, train_data
     
     train_data, val_data = train_test_split(train_data, test_size=0.3, random_state=42)
     val_data = val_data[:20]
-
-    # if train_emb_file != "":
-    with open(val_emb_file, 'rb') as f:
-        val_emb = pickle.load(f)
-    with open(train_emb_file, 'rb') as f:
-        train_emb = pickle.load(f)
-    # else:
-    #     train_emb = get_embeddings(train_data["question"].tolist())
-    #     val_emb = get_embeddings(val_data["question"].tolist())
-    start_time = time.time()
-    exemplars = static_subset_selection(pipeline, val_data, train_data, 5, dataset, train_emb, val_emb)
-    avg_err = llm_avg_error(pipeline, exemplars, val_data, dataset)
-    ind = np.argmin(avg_err)
-    start_time = time.time()    
-    end_time = time.time()
-    train_time = end_time - start_time
-    gpu_utilization = get_gpu_utilization()
     
-    exemplars_df = pd.concat(exemplars)
-    exemplars_df.to_csv(f"output/{dataset}_{model_name_prefix}_subset_selection.csv")
+    if mode == "full":
+        # if train_emb_file != "":
+        with open(val_emb_file, 'rb') as f:
+            val_emb = pickle.load(f)
+        with open(train_emb_file, 'rb') as f:
+            train_emb = pickle.load(f)
+        # else:
+        #     train_emb = get_embeddings(train_data["question"].tolist())
+        #     val_emb = get_embeddings(val_data["question"].tolist())
+        start_time = time.time()
+        exemplars = static_subset_selection(pipeline, val_data, train_data, 5, dataset_name, train_emb, val_emb)
+        avg_err = llm_avg_error(pipeline, exemplars, val_data, dataset_name)
+        ind = np.argmin(avg_err)
+        start_time = time.time()    
+        end_time = time.time()
+        train_time = end_time - start_time
+        gpu_utilization = get_gpu_utilization()
+        
+        exemplars_df = pd.concat(exemplars)
+        exemplars_df.to_csv(f"output/{dataset_name}_{model_name_prefix}_subset_selection.csv")
 
-    exemplars = exemplars[ind]
-    exemplars_df.to_csv(f"output/{dataset}_{model_name_prefix}_selected_exemplar.csv")
+        exemplars = exemplars[ind]
+        exemplars_df.to_csv(f"output/{dataset_name}_{model_name_prefix}_selected_exemplar.csv")
+    
+    elif mode == "test":
+        exemplars = pd.read_csv(f"output/{dataset_name}_{model_name_prefix}_selected_exemplar.csv")
+    else:
+        raise ValueError(f"Invalid mode: {mode}")
 
     question_df = {"question": [], "answers": [], "ground_truth": []}
     matches = 0
     mismatches = 0
 
-    for index, row in tqdm(test_data.iterrows(), total=len(test_data), desc="Generating"):
-        prompt = prompt_for_manual_prediction(row, exemplars, dataset)
-        answer = llm_output(pipeline, prompt, dataset)
-        gt = row["answer"]
+    # for index, row in tqdm(test_data.iterrows(), total=len(test_data), desc="Generating"):
+    #     prompt = prompt_for_manual_prediction(row, exemplars, dataset_name)
+    #     answer = llm_output(pipeline, prompt, dataset_name)
+    #     gt = row["answer"]
 
-        if dataset in ["aquarat", "finqa"]:
-            if answer == gt:
-                matches += 1
-            else:
-                mismatches += 1
-        elif dataset == "gsm8k":
-            try:
-                answer = int(answer)
-                gt = int(re.sub(r'[^0-9.]', "", gt.split("#### ")[1]))
+    #     if dataset_name in ["aquarat", "finqa"]:
+    #         if answer == gt:
+    #             matches += 1
+    #         else:
+    #             mismatches += 1
+    #     elif dataset_name == "gsm8k":
+    #         try:
+    #             answer = int(answer)
+    #             gt = int(re.sub(r'[^0-9.]', "", gt.split("#### ")[1]))
+    #             if answer == gt:
+    #                 matches += 1
+    #             else:
+    #                 mismatches += 1
+    #         except:
+    #             mismatches += 1
+    #     elif dataset_name == "strategyqa":
+    #         if gt.lower() in answer.lower() or answer.lower() in gt.lower():
+    #             matches += 1
+    #         else:
+    #             mismatches += 1
+    #     elif dataset_name == "tabmwp":
+    #         if answer != "" and (gt.lower() in answer.lower() or answer.lower() in gt.lower()):
+    #             matches += 1
+    #         else:
+    #             mismatches += 1
+
+    #     question_df['question'].append(row["question"])
+    #     question_df["answers"].append(answer)
+    #     question_df["ground_truth"].append(gt)
+        
+    #     if index >= 10:
+    #         break
+    
+    for i in tqdm(range(0, len(test_data), batch_size), desc="Generating Batch"):
+        batch = test_data.iloc[i:i + batch_size]
+        prompts = [prompt_for_manual_prediction(row, exemplars, dataset_name) for _, row in batch.iterrows()]
+        answers = llm_batch_output(pipeline, prompts, dataset_name)
+        
+        for (index, row), answer in zip(batch.iterrows(), answers):
+            gt = row["answer"]
+            if dataset_name in ["aquarat", "finqa"]:
                 if answer == gt:
                     matches += 1
                 else:
                     mismatches += 1
-            except:
-                mismatches += 1
-        elif dataset == "strategyqa":
-            if gt.lower() in answer.lower() or answer.lower() in gt.lower():
-                matches += 1
-            else:
-                mismatches += 1
-        elif dataset == "tabmwp":
-            if answer != "" and (gt.lower() in answer.lower() or answer.lower() in gt.lower()):
-                matches += 1
-            else:
-                mismatches += 1
+            elif dataset_name == "gsm8k":
+                try:
+                    answer = int(answer)
+                    gt = int(re.sub(r'[^0-9.]', "", gt.split("#### ")[1]))
+                    if answer == gt:
+                        matches += 1
+                    else:
+                        mismatches += 1
+                except:
+                    mismatches += 1
+            elif dataset_name == "strategyqa":
+                if gt.lower() in answer.lower() or answer.lower() in gt.lower():
+                    matches += 1
+                else:
+                    mismatches += 1
+            elif dataset_name == "tabmwp":
+                if answer != "" and (gt.lower() in answer.lower() or answer.lower() in gt.lower()):
+                    matches += 1
+                else:
+                    mismatches += 1
 
-        question_df['question'].append(row["question"])
-        question_df["answers"].append(answer)
-        question_df["ground_truth"].append(gt)
+            question_df['question'].append(row["question"])
+            question_df["answers"].append(answer)
+            question_df["ground_truth"].append(gt)
+            
+            if i >= 2:
+                break
 
     final_questions = pd.DataFrame(question_df)
-    final_questions.to_csv(f"output/{dataset}_{model_name_prefix}_question_answer.tsv", sep="\t", index=False)
+    final_questions.to_csv(f"output/{dataset_name}_{model_name_prefix}_question_answer.tsv", sep="\t", index=False)
     em = matches / (matches + mismatches)
-    result_dict = {"min_exemplar_error_index": [ind], "min_exemplar_error": [avg_err[ind]], "matches": [matches],
+    result_dict = {"matches": [matches],
                    "mismatches": [mismatches], "EM": [em], "val_data_len": [len(val_data)],
                    "train_data_len": [len(train_data)], "test_data_len": [len(test_data)],
-                   "model_name_prefix": [model_name_prefix], "dataset": [dataset],
-                   "training_time": [train_time], "gpu_utilization": [gpu_utilization]}
-    pd.DataFrame(result_dict).to_csv(f"output/{dataset}_{model_name_prefix}_result_summary.csv")
+                   "model_name_prefix": [model_name_prefix], "dataset": [dataset_name]}
+    if mode == "full":
+        result_dict["gpu_utilization"] = [gpu_utilization]
+        result_dict["training_time"] = [train_time]
     print(result_dict)
+    print("\n\n")
+    pd.DataFrame(result_dict).to_csv(f"output/{dataset_name}_{model_name_prefix}_result_summary.csv")
     return final_questions
 
 
@@ -439,7 +533,7 @@ def read_strategyqa(file_path):
         examples.append(ex)
     return pd.DataFrame(examples)
 
-def run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name):
+def run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name, mode):
     random.seed(7)
     np.random.seed(7)
     torch.manual_seed(7)
@@ -451,14 +545,14 @@ def run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name):
 
     # Model Configuration
     model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch_dtype).to(device)
-    # tokenizer = AutoTokenizer.from_pretrained(model_name, torch_dtype=torch_dtype)
+    tokenizer = AutoTokenizer.from_pretrained(model_name, torch_dtype=torch_dtype)
     model.generation_config.pad_token_id = model.generation_config.eos_token_id
-    pipeline = transformers.pipeline("text-generation", model=model_name, torch_dtype=torch_dtype, device_map="auto")
+    pipeline = transformers.pipeline("text-generation", model=model, tokenizer=tokenizer, device=device)
     # tokenizer_bert = BertTokenizer.from_pretrained('bert-base-uncased')
     # model_bert = BertModel.from_pretrained('bert-base-uncased').to(device)
     # logging.set_verbosity_error()
     
-    dataset_name = "aquarat"  # "aquarat", "finqa", "gsm8k", "strategyqa", "tabmwp"
+    # "aquarat", "finqa", "gsm8k", "strategyqa", "tabmwp"
     if dataset_name == "aquarat":
         train_data = "datasets/AQUA_RAT/aquarat_train.csv"
         test_data = "datasets/AQUA_RAT/aquarat_dev.csv"
@@ -485,7 +579,7 @@ def run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name):
         test_data = read_strategyqa(test_data)
     else:
         raise ValueError(f"Invalid dataset name: {dataset_name}")
-    final_df = get_open_source_completions(dataset_name, model_name_prefix, pipeline, train_data, test_data)
+    final_df = get_open_source_completions(dataset_name, model_name_prefix, pipeline, train_data, test_data, mode)
     # print(final_df)
 
 
@@ -494,24 +588,28 @@ if __name__ == '__main__':
     model_name_prefix = sys.argv[1]
     # "aquarat", "finqa", "gsm8k", "strategyqa", "tabmwp"
     dataset_name = sys.argv[2]
+    mode = sys.argv[3]
+    
+    print(f"model_name_prefix: {model_name_prefix}, dataset_name: {dataset_name}, mode: {mode}")
+    print("\n\n")
     
     torch_dtype=torch.float16
     model_name = ""
     
-    if model_name_prefix.startswith("mistal7b"):
+    if model_name_prefix.startswith("mistral7b"):
         model_name = "mistralai/Mistral-7B-Instruct-v0.1"
     elif model_name_prefix.startswith("llama3b"):
         model_name = "meta-llama/Llama-3.2-3B-Instruct"
     elif model_name_prefix.startswith("llama1b"):
         model_name = "meta-llama/Llama-3.2-1B-Instruct"
     else:
-        raise ValueError(f"Invalid dataset name: {model_name_prefix}")
+        raise ValueError(f"Invalid model name: {model_name_prefix}")
     
-    if model_name_prefix.split("_")[-1] == 16:
+    if model_name_prefix.split("_")[-1] == "16":
         torch_dtype=torch.float16
-    elif model_name_prefix.split("_")[-1] == 32:
+    elif model_name_prefix.split("_")[-1] == "32":
         torch_dtype=torch.float32
     else:
-        raise ValueError(f"Invalid dataset name: {model_name_prefix}")
+        raise ValueError(f"Invalid model name: {model_name_prefix}")
 
-    run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name)
+    run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name, mode)
