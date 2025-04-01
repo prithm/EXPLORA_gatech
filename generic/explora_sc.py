@@ -503,8 +503,8 @@ def get_open_source_completions(dataset_name, model_name_prefix, pipeline, train
             question_df["answers"].append(answer)
             question_df["ground_truth"].append(gt)
             
-            if i >= 2:
-                break
+        if i >= 2:
+            break
 
     final_questions = pd.DataFrame(question_df)
     final_questions.to_csv(f"output/{dataset_name}_{model_name_prefix}_question_answer.tsv", sep="\t", index=False)
@@ -533,7 +533,7 @@ def read_strategyqa(file_path):
         examples.append(ex)
     return pd.DataFrame(examples)
 
-def run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name, mode):
+def run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name, mode, batch_size):
     random.seed(7)
     np.random.seed(7)
     torch.manual_seed(7)
@@ -579,9 +579,12 @@ def run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name, mode)
         test_data = read_strategyqa(test_data)
     else:
         raise ValueError(f"Invalid dataset name: {dataset_name}")
-    final_df = get_open_source_completions(dataset_name, model_name_prefix, pipeline, train_data, test_data, mode)
+    final_df = get_open_source_completions(dataset_name, model_name_prefix, pipeline, train_data, test_data, mode, batch_size)
     # print(final_df)
 
+
+# Example usage: python generic/explora_sc.py mistral7b_16 tabmwp test 12
+# Example usage: python generic/explora_sc.py mistral7b_16 tabmwp full 12
 
 if __name__ == '__main__':
      # "mistral7b_16", "mistral7b_32", "llama3b_16", "llama3b_32", "llama1b_16", "llama1b_32"
@@ -589,6 +592,7 @@ if __name__ == '__main__':
     # "aquarat", "finqa", "gsm8k", "strategyqa", "tabmwp"
     dataset_name = sys.argv[2]
     mode = sys.argv[3]
+    batch_size = int(sys.argv[4])
     
     print(f"model_name_prefix: {model_name_prefix}, dataset_name: {dataset_name}, mode: {mode}")
     print("\n\n")
@@ -612,4 +616,4 @@ if __name__ == '__main__':
     else:
         raise ValueError(f"Invalid model name: {model_name_prefix}")
 
-    run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name, mode)
+    run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name, mode, batch_size)
