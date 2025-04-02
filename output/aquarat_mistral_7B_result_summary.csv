@@ -1,0 +1,2 @@
+,min_exemplar_error_index,min_exemplar_error,matches,mismatches,EM,val_data_len,train_data_len,test_data_len
+0,0,0.8,50,204,0.1968503937007874,20,68226,254

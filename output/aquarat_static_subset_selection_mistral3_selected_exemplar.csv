@@ -1,0 +1,20 @@
+,question,options,rationale,correct,cluster,index
+20758,"In a certain animal population, for each of the first 3 months of life, the probability that an animal will die during that month is 1/4. For a group of 200 newborn members of the population, approximately how many would be expected to survive the first 3 months of life?","['A)40', 'B)46', 'C)52', 'D)62', 'E)85']","The probability of survival for each of the first 3 months of life is 1-1/4=3/4, so of 200 newborn 200*3/4 *3/4*3/4=~85 is expected to survive.
+Answer: E.",E,0,53779
+91194,A starts walking at 4 kmph and 4 hours after his start B starts cycling at 10 kmph. After how much distance will B catch up with A,"['A)26.2 km', 'B)25.7 km', 'C)23.2 km', 'D)26.67 km', 'E)None of these']","Explanation:
+Distance travelled by each of them is to be made equal.
+=> Distance travelled walking = Distance covered cycling.
+Let after 4 hours of walking, A walk for x hours more before B catches up with him.
+=> Distance = Speed * Time
+(4+x)4 = 10x
+x = 8/3
+Therefore, It takes B 8/3 hours to catch up with A. Distance: 8/3 x 10 = 80/3 km = 26.67
+ANSWER: D",D,1,66263
+48428,"From the integer n, if n*n*n is odd, then what is true from below options?","['A)n is odd', 'B)n is odd and n*n is even', 'C)n is even', 'D)n*n is even', 'E)n*n odd']","n is odd and n*n is even
+Option B",B,2,28366
+92153,Rs.8000 become Rs.9261 in a certain interval of time at the rate of 5% per annum of C.I. Find the time?,"['A)10years', 'B)12 years', 'C)5 years', 'D)3 years', 'E)24 years']","Explanation:
+9261 = 8000(21/20)N
+(21/20)3 = (21/20)N => N = 3 years
+Answer:D",D,3,5719
+60372,"Look at this series: 3, 4, 7, 8, 11, 12, ... What number should come next?","['A)7', 'B)10', 'C)14', 'D)15', 'E)16']","Explanation: This alternating addition series begins with 3; then 1 is added to give 4; then 3 is added to give 7; then 1 is added, and so on.
+Answer: Option D",D,4,62453

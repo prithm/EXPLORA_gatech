@@ -1,0 +1,74 @@
+,question,choices,answer,unit,table_title,table,table_for_pd,row_num,column_num,solution,ques_type,ans_type,grade,split,cluster,index
+22454,An athlete counted how many autographs he signed each day. What is the median of the numbers?,,4,,Autographs signed,"Day | Number of autographs
+Friday | 2
+Saturday | 9
+Sunday | 4
+Monday | 4
+Tuesday | 10
+Wednesday | 4
+Thursday | 2","{'Day': ['Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'], 'Number of autographs': ['2', '9', '4', '4', '10', '4', '2']}",8,2,"Read the numbers from the table.
+
+2, 9, 4, 4, 10, 4, 2
+
+First, arrange the numbers from least to greatest:
+
+2, 2, 4, 4, 4, 9, 10
+
+Now find the number in the middle.
+
+2, 2, 4, 4, 4, 9, 10
+
+The number in the middle is 4.
+
+The median is 4.",free_text,integer_number,6,train,0,3407
+22051,A philanthropic organization compared the amounts of money that its members donated to certain causes. How much more did Barbara donate to animal rights than to job training?,,2,$,Donations,"Person | Animal rights | Job training
+Chandler | $20 | $19
+Barbara | $18 | $16
+Sophie | $17 | $12","{'Person': ['Chandler', 'Barbara', 'Sophie'], 'Animal rights': ['$20', '$18', '$17'], 'Job training': ['$19', '$16', '$12']}",4,3,"Find the Barbara row. Find the numbers in this row for animal rights and job training.
+
+animal rights: $18.00
+job training: $16.00
+
+Now subtract:
+
+$18.00 − $16.00 = $2.00
+
+Barbara donated $2 more to animal rights than to job training.",free_text,integer_number,4,train,1,7790
+31119,"How much money does Porter need to buy a silver bow, a big blue button, and a purple bow?",,0.15,$,,"big blue button | $0.04
+silver bow | $0.07
+red ribbon | $0.06
+purple bow | $0.04
+pair of googly eyes | $0.04","{'Column 1': ['big blue button', 'silver bow', 'red ribbon', 'purple bow', 'pair of googly eyes'], 'Column 2': ['$0.04', '$0.07', '$0.06', '$0.04', '$0.04']}",5,2,"Find the total cost of a silver bow, a big blue button, and a purple bow.
+
+$0.07 + $0.04 + $0.04 = $0.15
+
+Porter needs $0.15.",free_text,decimal_number,4,train,2,2889
+16596,The table shows a function. Is the function linear or nonlinear?,"['linear', 'nonlinear']",linear,,,"x | y
+18 | 20
+19 | 10
+20 | 0","{'x': ['18', '19', '20'], 'y': ['20', '10', '0']}",4,2,"To determine whether the function is linear or nonlinear, see whether it has a constant rate of change.
+Pick the points in any two rows of the table and calculate the rate of change between them. The first two rows are a good place to start.
+Call the values in the first row x1 and y1. Call the values in the second row x2 and y2.
+Rate of change = \frac{y2 - y1}{x2 - x1}
+ = \frac{10 - 20}{19 - 18}
+ = \frac{-10}{1}
+ = -10
+Now pick any other two rows and calculate the rate of change between them.
+Call the values in the first row x1 and y1. Call the values in the third row x2 and y2.
+Rate of change = \frac{y2 - y1}{x2 - x1}
+ = \frac{0 - 20}{20 - 18}
+ = \frac{-20}{2}
+ = -10
+The two rates of change are the same.
+10.
+This means the rate of change is the same for each pair of points. So, the function has a constant rate of change.
+The function is linear.",multi_choice,boolean_text,8,train,3,7190
+22924,Look at the following schedule. When does Architecture class end?,"['3:15 P.M.', '8:40 A.M.', '8:10 A.M.', '9:40 A.M.']",8:40 A.M.,,Class schedule,"Subject | Begin | End
+Architecture | 8:10 A.M. | 8:40 A.M.
+Spanish Literature | 9:00 A.M. | 9:40 A.M.
+Basketball | 10:15 A.M. | 11:30 A.M.
+Chinese | 11:40 A.M. | 12:10 P.M.
+Essay Writing | 12:50 P.M. | 2:10 P.M.
+Ancient Greek | 2:15 P.M. | 3:15 P.M.","{'Subject': ['Architecture', 'Spanish Literature', 'Basketball', 'Chinese', 'Essay Writing', 'Ancient Greek'], 'Begin': ['8:10 A.M.', '9:00 A.M.', '10:15 A.M.', '11:40 A.M.', '12:50 P.M.', '2:15 P.M.'], 'End': ['8:40 A.M.', '9:40 A.M.', '11:30 A.M.', '12:10 P.M.', '2:10 P.M.', '3:15 P.M.']}",7,3,"Find Architecture class on the schedule. Find the end time for Architecture class.
+
+Architecture: 8:40 A. M.",multi_choice,extractive_text,3,train,4,13068

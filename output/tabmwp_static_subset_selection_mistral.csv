@@ -1,0 +1,620 @@
+,question,choices,answer,unit,table_title,table,table_for_pd,row_num,column_num,solution,ques_type,ans_type,grade,split,cluster,index
+12249,Some students compared how many blocks they live from school. What is the mean of the numbers?,,7,,Blocks from school,"Name | Number of blocks
+Steven | 3
+Albert | 1
+Ted | 3
+Erin | 5
+Ross | 18
+Bert | 13
+Paul | 6","{'Name': ['Steven', 'Albert', 'Ted', 'Erin', 'Ross', 'Bert', 'Paul'], 'Number of blocks': ['3', '1', '3', '5', '18', '13', '6']}",8,2,"Read the numbers from the table.
+
+3, 1, 3, 5, 18, 13, 6
+
+First, count how many numbers are in the group.
+
+There are 7 numbers.
+
+Now add all the numbers together:
+
+3 + 1 + 3 + 5 + 18 + 13 + 6 = 49
+
+Now divide the sum by the number of numbers:
+
+49 ÷ 7 = 7
+
+The mean is 7.",free_text,integer_number,5,train,0,7651
+7837,A bakery recorded how many cupcakes it sold in the past 3 days. How many cupcakes in total did the bakery sell on Tuesday and Thursday?,,258,cupcakes,Cupcakes sold,"Day | Number of cupcakes
+Tuesday | 147
+Wednesday | 683
+Thursday | 111","{'Day': ['Tuesday', 'Wednesday', 'Thursday'], 'Number of cupcakes': ['147', '683', '111']}",4,2,"Find the numbers in the table.
+
+Tuesday: 147
+Thursday: 111
+
+Now add: 147 + 111 = 258.
+
+The bakery sold 258 cupcakes on Tuesday and Thursday.",free_text,integer_number,3,train,1,10727
+35134,How much money does Deion need to buy a poetry book and a textbook?,,26.30,$,,"textbook | $12.79
+poetry book | $13.51
+science book | $11.55
+history book | $15.49
+crossword puzzle book | $24.85","{'Column 1': ['textbook', 'poetry book', 'science book', 'history book', 'crossword puzzle book'], 'Column 2': ['$12.79', '$13.51', '$11.55', '$15.49', '$24.85']}",5,2,"Add the price of a poetry book and the price of a textbook:
+
+$13.51 + $12.79 = $26.30
+
+Deion needs $26.30.",free_text,decimal_number,5,train,2,712
+25916,"Look at the table. Then answer the question. At a price of $755, is there a shortage or a surplus?","['shortage', 'surplus']",shortage,,,"Price | Quantity demanded | Quantity supplied
+$615 | 17,000 | 8,800
+$685 | 13,900 | 9,400
+$755 | 10,800 | 10,000
+$825 | 7,700 | 10,600
+$895 | 4,600 | 11,200","{'Price': ['$615', '$685', '$755', '$825', '$895'], 'Quantity demanded': ['17,000', '13,900', '10,800', '7,700', '4,600'], 'Quantity supplied': ['8,800', '9,400', '10,000', '10,600', '11,200']}",6,3,"At the price of $755, the quantity demanded is greater than the quantity supplied. There is not enough of the good or service for sale at that price. So, there is a shortage.
+",multi_choice,boolean_text,5,train,3,14957
+2663,Look at the following schedule. Alan just missed the 12.45 P.M. bus at the famous bridge. What time is the next bus?,"['1:30 P.M.', '10:45 A.M.', '2:15 P.M.', '12:45 P.M.']",1:30 P.M.,,Tour bus schedule,"old building | 8:00 A.M. | 10:00 A.M. | 10:15 A.M. | 11:00 A.M.
+university campus | 8:45 A.M. | 10:45 A.M. | 11:00 A.M. | 11:45 A.M.
+shopping district | 9:30 A.M. | 11:30 A.M. | 11:45 A.M. | 12:30 P.M.
+the riverfront | 9:45 A.M. | 11:45 A.M. | 12:00 P.M. | 12:45 P.M.
+famous bridge | 10:30 A.M. | 12:30 P.M. | 12:45 P.M. | 1:30 P.M.
+landmark sculpture | 11:15 A.M. | 1:15 P.M. | 1:30 P.M. | 2:15 P.M.
+the aquarium | 12:15 P.M. | 2:15 P.M. | 2:30 P.M. | 3:15 P.M.
+the zoo | 1:00 P.M. | 3:00 P.M. | 3:15 P.M. | 4:00 P.M.","{'Column 1': ['old building', 'university campus', 'shopping district', 'the riverfront', 'famous bridge', 'landmark sculpture', 'the aquarium', 'the zoo'], 'Column 2': ['8:00 A.M.', '8:45 A.M.', '9:30 A.M.', '9:45 A.M.', '10:30 A.M.', '11:15 A.M.', '12:15 P.M.', '1:00 P.M.'], 'Column 3': ['10:00 A.M.', '10:45 A.M.', '11:30 A.M.', '11:45 A.M.', '12:30 P.M.', '1:15 P.M.', '2:15 P.M.', '3:00 P.M.'], 'Column 4': ['10:15 A.M.', '11:00 A.M.', '11:45 A.M.', '12:00 P.M.', '12:45 P.M.', '1:30 P.M.', '2:30 P.M.', '3:15 P.M.'], 'Column 5': ['11:00 A.M.', '11:45 A.M.', '12:30 P.M.', '12:45 P.M.', '1:30 P.M.', '2:15 P.M.', '3:15 P.M.', '4:00 P.M.']}",8,5,"Find 12:45 P. M. in the row for the famous bridge.
+
+Look for the next bus in that row.
+
+The next bus is at 1:30 P. M.",multi_choice,extractive_text,4,train,4,9204
+27372,Each aquarium has 5 yellow fish. How many yellow fish are in 3 aquariums?,,15,yellow fish,,"Number of aquariums | Number of yellow fish
+1 | 5
+2 | 10
+3 | ?","{'Number of aquariums': ['1', '2', '3'], 'Number of yellow fish': ['5', '10', '?']}",4,2,Count by fives. Use the chart: there are 15 yellow fish in 3 aquariums.,free_text,integer_number,1,train,0,1423
+21630,"Riley kept a tally of the number of emails she received each day for a week. According to the table, what was the rate of change between Tuesday and Wednesday?",,1,emails per day,Emails Riley received,"Day | Emails
+Monday | 6
+Tuesday | 6
+Wednesday | 7
+Thursday | 7
+Friday | 5","{'Day': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], 'Emails': ['6', '6', '7', '7', '5']}",6,2,"Plug the numbers into the formula for rate of change and simplify.
+Rate of change
+ = \frac{change in value}{change in time}
+ = \frac{7 emails - 6 emails}{1 day}
+ = \frac{1 email}{1 day}
+ = 1 email per day
+The rate of change between Tuesday and Wednesday was 1 email per day.",free_text,integer_number,7,train,1,15492
+2069,How much more does a brass clip cost than a gold tack?,,0.38,$,,"red thumbtack | $0.13
+flat-head bolt | $0.21
+brass clip | $0.48
+gold tack | $0.10
+ball of twine | $0.27
+piece of rope | $0.21","{'Column 1': ['red thumbtack', 'flat-head bolt', 'brass clip', 'gold tack', 'ball of twine', 'piece of rope'], 'Column 2': ['$0.13', '$0.21', '$0.48', '$0.10', '$0.27', '$0.21']}",6,2,"Subtract the price of a gold tack from the price of a brass clip.
+
+$0.48 - $0.10 = $0.38
+
+A brass clip costs $0.38 more than a gold tack.",free_text,decimal_number,4,train,2,1299
+10810,Look at this table. Is this relation a function?,"['yes', 'no']",no,,,"x | y
+9 | 9
+9 | 12
+8 | 6","{'x': ['9', '9', '8'], 'y': ['9', '12', '6']}",4,2,"Look at the x-values in the table.
+
+The x-value 9 is paired with multiple y-values, so the relation is not a function.",multi_choice,boolean_text,8,train,3,4863
+38066,Look at the following schedule. When does the train depart from Oakland?,"['9:30 A.M.', '9:45 A.M.', '7:15 A.M.', '8:25 A.M.']",9:45 A.M.,,Train schedule,"Location | Arrive | Depart
+Fairfax | 7:00 A.M. | 7:15 A.M.
+Springdale | 8:25 A.M. | 8:35 A.M.
+Oakland | 9:30 A.M. | 9:45 A.M.
+Newton | 11:25 A.M. | 11:35 A.M.
+Winchester | 1:00 P.M. | 1:15 P.M.
+Clarksville | 2:40 P.M. | 2:45 P.M.
+Springtown | 4:20 P.M. | 4:30 P.M.
+Greenpoint | 5:35 P.M. | 5:50 P.M.
+Hampton | 7:25 P.M. | 7:40 P.M.
+Hillsboro | 8:15 P.M. | 8:25 P.M.","{'Location': ['Fairfax', 'Springdale', 'Oakland', 'Newton', 'Winchester', 'Clarksville', 'Springtown', 'Greenpoint', 'Hampton', 'Hillsboro'], 'Arrive': ['7:00 A.M.', '8:25 A.M.', '9:30 A.M.', '11:25 A.M.', '1:00 P.M.', '2:40 P.M.', '4:20 P.M.', '5:35 P.M.', '7:25 P.M.', '8:15 P.M.'], 'Depart': ['7:15 A.M.', '8:35 A.M.', '9:45 A.M.', '11:35 A.M.', '1:15 P.M.', '2:45 P.M.', '4:30 P.M.', '5:50 P.M.', '7:40 P.M.', '8:25 P.M.']}",11,3,"Find Oakland on the schedule. Find the departure time for Oakland.
+
+Oakland: 9:45 A. M.",multi_choice,extractive_text,3,train,4,1893
+939,Keenan's coach wrote down how many kilometers he had run over the past 5 days. What is the mean of the numbers?,,3,,Kilometers run,"Day | Kilometers
+Tuesday | 4
+Wednesday | 0
+Thursday | 6
+Friday | 4
+Saturday | 1","{'Day': ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], 'Kilometers': ['4', '0', '6', '4', '1']}",6,2,"Read the numbers from the table.
+
+4, 0, 6, 4, 1
+
+First, count how many numbers are in the group.
+
+There are 5 numbers.
+
+Now add all the numbers together:
+
+4 + 0 + 6 + 4 + 1 = 15
+
+Now divide the sum by the number of numbers:
+
+15 ÷ 5 = 3
+
+The mean is 3.",free_text,integer_number,7,train,0,9244
+7036,Finn's class recorded how many cans of food each student collected for their canned food drive. Who collected the fewest cans?,"['Finn', 'Roxanne', 'Omar', 'Maria']",Roxanne,,Cans of food collected,"Name | Number of cans of food
+Finn | 75
+Roxanne | 74
+Omar | 79
+Maria | 76","{'Name': ['Finn', 'Roxanne', 'Omar', 'Maria'], 'Number of cans of food': ['75', '74', '79', '76']}",5,2,"Find the least number in the table. Remember to compare the numbers starting with the highest place value. The least number is 74.
+
+Now find the corresponding name. Roxanne corresponds to 74.",multi_choice,extractive_text,2,train,1,11327
+4440,Clara has $37.00. Does she have enough to buy a yellow dress and a red sweater?,"['yes', 'no']",yes,,,"pair of sweat pants | $19.00
+pair of brown pants | $29.00
+red sweater | $12.00
+yellow dress | $23.00","{'Column 1': ['pair of sweat pants', 'pair of brown pants', 'red sweater', 'yellow dress'], 'Column 2': ['$19.00', '$29.00', '$12.00', '$23.00']}",4,2,"Add the price of a yellow dress and the price of a red sweater:
+
+$23.00 + $12.00 = $35.00
+
+$35.00 is less than $37.00. Clara does have enough money.",multi_choice,boolean_text,3,train,2,12941
+28926,"Look at the table. Then answer the question. At a price of $1,150, is there a shortage or a surplus?","['shortage', 'surplus']",surplus,,,"Price | Quantity demanded | Quantity supplied
+$1,000 | 19,800 | 3,100
+$1,050 | 16,200 | 6,900
+$1,100 | 12,600 | 10,700
+$1,150 | 9,000 | 14,500
+$1,200 | 5,400 | 18,300","{'Price': ['$1,000', '$1,050', '$1,100', '$1,150', '$1,200'], 'Quantity demanded': ['19,800', '16,200', '12,600', '9,000', '5,400'], 'Quantity supplied': ['3,100', '6,900', '10,700', '14,500', '18,300']}",6,3,"At the price of $1,150, the quantity demanded is less than the quantity supplied. There is too much of the good or service for sale at that price. So, there is a surplus.
+",multi_choice,boolean_text,5,train,3,11214
+15825,Look at the following schedule. Rosanne is at Ocean City at 10.45 A.M. How soon can she get to Fisherman's Cove?,"['12:15 P.M.', '1:30 P.M.', '12:45 P.M.', '9:30 A.M.']",12:45 P.M.,,Tour boat schedule,"Whale Watch Harbor | 8:15 A.M. | 8:30 A.M. | 9:00 A.M. | 9:30 A.M. | 9:45 A.M.
+Ocean City | 9:45 A.M. | 10:00 A.M. | 10:30 A.M. | 11:00 A.M. | 11:15 A.M.
+Fisherman's Cove | 11:30 A.M. | 11:45 A.M. | 12:15 P.M. | 12:45 P.M. | 1:00 P.M.
+Sea Town | 12:15 P.M. | 12:30 P.M. | 1:00 P.M. | 1:30 P.M. | 1:45 P.M.","{'Column 1': ['Whale Watch Harbor', 'Ocean City', ""Fisherman's Cove"", 'Sea Town'], 'Column 2': ['8:15 A.M.', '9:45 A.M.', '11:30 A.M.', '12:15 P.M.'], 'Column 3': ['8:30 A.M.', '10:00 A.M.', '11:45 A.M.', '12:30 P.M.'], 'Column 4': ['9:00 A.M.', '10:30 A.M.', '12:15 P.M.', '1:00 P.M.'], 'Column 5': ['9:30 A.M.', '11:00 A.M.', '12:45 P.M.', '1:30 P.M.'], 'Column 6': ['9:45 A.M.', '11:15 A.M.', '1:00 P.M.', '1:45 P.M.']}",4,6,"Look at the row for Ocean City. Find the next boat departing from Ocean City after 10:45 A. M. This boat departs from Ocean City at 11:00 A. M.
+
+Look down the column until you find the row for Fisherman's Cove.
+
+Rosanne will get to Fisherman's Cove at 12:45 P. M.",multi_choice,extractive_text,4,train,4,13691
+28013,The teachers at a middle school counted how many computers they had in their classrooms. What is the mean of the numbers?,,9,,Computers in classrooms,"Teacher | Number of computers
+Mrs. Tan | 4
+Mr. Watson | 9
+Ms. Cohen | 11
+Mr. Lim | 6
+Ms. Rojas | 3
+Mrs. Jansen | 7
+Mrs. Rossi | 16
+Mr. Schmidt | 16","{'Teacher': ['Mrs. Tan', 'Mr. Watson', 'Ms. Cohen', 'Mr. Lim', 'Ms. Rojas', 'Mrs. Jansen', 'Mrs. Rossi', 'Mr. Schmidt'], 'Number of computers': ['4', '9', '11', '6', '3', '7', '16', '16']}",9,2,"Read the numbers from the table.
+
+4, 9, 11, 6, 3, 7, 16, 16
+
+First, count how many numbers are in the group.
+
+There are 8 numbers.
+
+Now add all the numbers together:
+
+4 + 9 + 11 + 6 + 3 + 7 + 16 + 16 = 72
+
+Now divide the sum by the number of numbers:
+
+72 ÷ 8 = 9
+
+The mean is 9.",free_text,integer_number,5,train,0,15575
+25872,"Abby kept track of the number of games her soccer team won each year. According to the table, what was the rate of change between 2007 and 2008?",,-5,games per year,Games won by Abby's soccer team,"Year | Games won
+2006 | 7
+2007 | 40
+2008 | 35
+2009 | 47
+2010 | 48","{'Year': ['2006', '2007', '2008', '2009', '2010'], 'Games won': ['7', '40', '35', '47', '48']}",6,2,"Plug the numbers into the formula for rate of change and simplify.
+Rate of change
+ = \frac{change in value}{change in time}
+ = \frac{35 games - 40 games}{2008 - 2007}
+ = \frac{35 games - 40 games}{1 year}
+ = \frac{-5 games}{1 year}
+ = -5 games per year
+The rate of change between 2007 and 2008 was - 5 games per year.",free_text,integer_number,8,train,1,6197
+34056,How much money does Lily need to buy 6 Mustang horses and 6 Clydesdale horses?,,"90,360",$,,"Palomino horse | $4,169
+Quarter horse | $3,003
+Mustang horse | $7,845
+Pinto horse | $1,034
+Arabian horse | $3,916
+Clydesdale horse | $7,215","{'Column 1': ['Palomino horse', 'Quarter horse', 'Mustang horse', 'Pinto horse', 'Arabian horse', 'Clydesdale horse'], 'Column 2': ['$4,169', '$3,003', '$7,845', '$1,034', '$3,916', '$7,215']}",6,2,"Find the cost of 6 Mustang horses.
+
+$7,845 × 6 = $47,070
+
+Find the cost of 6 Clydesdale horses.
+
+$7,215 × 6 = $43,290
+
+Now find the total cost.
+
+$47,070 + $43,290 = $90,360
+
+Lily needs $90,360.",free_text,integer_number,8,train,2,1635
+27945,The table shows a function. Is the function linear or nonlinear?,"['linear', 'nonlinear']",linear,,,"x | y
+2 | 15
+3 | 8
+4 | 1","{'x': ['2', '3', '4'], 'y': ['15', '8', '1']}",4,2,"To determine whether the function is linear or nonlinear, see whether it has a constant rate of change.
+Pick the points in any two rows of the table and calculate the rate of change between them. The first two rows are a good place to start.
+Call the values in the first row x1 and y1. Call the values in the second row x2 and y2.
+Rate of change = \frac{y2 - y1}{x2 - x1}
+ = \frac{8 - 15}{3 - 2}
+ = \frac{-7}{1}
+ = -7
+Now pick any other two rows and calculate the rate of change between them.
+Call the values in the second row x1 and y1. Call the values in the third row x2 and y2.
+Rate of change = \frac{y2 - y1}{x2 - x1}
+ = \frac{1 - 8}{4 - 3}
+ = \frac{-7}{1}
+ = -7
+The two rates of change are the same.
+7.
+This means the rate of change is the same for each pair of points. So, the function has a constant rate of change.
+The function is linear.",multi_choice,boolean_text,8,train,3,13051
+31027,Look at the following schedule. When does the advanced ballet class begin?,"['5:30 P.M.', '10:40 A.M.', '1:50 P.M.', '2:40 P.M.']",1:50 P.M.,,Dance studio schedule,"Class | Begin | End
+intermediate ballet | 9:10 A.M. | 10:35 A.M.
+modern dance | 10:40 A.M. | 11:10 A.M.
+beginning ballet | 11:20 A.M. | 11:50 A.M.
+hip hop dance | 12:05 P.M. | 1:00 P.M.
+salsa dance | 1:10 P.M. | 1:40 P.M.
+advanced ballet | 1:50 P.M. | 2:25 P.M.
+western dance | 2:40 P.M. | 3:40 P.M.
+swing dance | 3:45 P.M. | 5:25 P.M.
+tap dance | 5:30 P.M. | 6:00 P.M.
+ballroom dance | 6:05 P.M. | 7:40 P.M.","{'Class': ['intermediate ballet', 'modern dance', 'beginning ballet', 'hip hop dance', 'salsa dance', 'advanced ballet', 'western dance', 'swing dance', 'tap dance', 'ballroom dance'], 'Begin': ['9:10 A.M.', '10:40 A.M.', '11:20 A.M.', '12:05 P.M.', '1:10 P.M.', '1:50 P.M.', '2:40 P.M.', '3:45 P.M.', '5:30 P.M.', '6:05 P.M.'], 'End': ['10:35 A.M.', '11:10 A.M.', '11:50 A.M.', '1:00 P.M.', '1:40 P.M.', '2:25 P.M.', '3:40 P.M.', '5:25 P.M.', '6:00 P.M.', '7:40 P.M.']}",11,3,"Find the advanced ballet class on the schedule. Find the beginning time for the advanced ballet class.
+
+advanced ballet: 1:50 P. M.",multi_choice,extractive_text,3,train,4,2010
+22454,An athlete counted how many autographs he signed each day. What is the median of the numbers?,,4,,Autographs signed,"Day | Number of autographs
+Friday | 2
+Saturday | 9
+Sunday | 4
+Monday | 4
+Tuesday | 10
+Wednesday | 4
+Thursday | 2","{'Day': ['Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'], 'Number of autographs': ['2', '9', '4', '4', '10', '4', '2']}",8,2,"Read the numbers from the table.
+
+2, 9, 4, 4, 10, 4, 2
+
+First, arrange the numbers from least to greatest:
+
+2, 2, 4, 4, 4, 9, 10
+
+Now find the number in the middle.
+
+2, 2, 4, 4, 4, 9, 10
+
+The number in the middle is 4.
+
+The median is 4.",free_text,integer_number,6,train,0,3407
+22051,A philanthropic organization compared the amounts of money that its members donated to certain causes. How much more did Barbara donate to animal rights than to job training?,,2,$,Donations,"Person | Animal rights | Job training
+Chandler | $20 | $19
+Barbara | $18 | $16
+Sophie | $17 | $12","{'Person': ['Chandler', 'Barbara', 'Sophie'], 'Animal rights': ['$20', '$18', '$17'], 'Job training': ['$19', '$16', '$12']}",4,3,"Find the Barbara row. Find the numbers in this row for animal rights and job training.
+
+animal rights: $18.00
+job training: $16.00
+
+Now subtract:
+
+$18.00 − $16.00 = $2.00
+
+Barbara donated $2 more to animal rights than to job training.",free_text,integer_number,4,train,1,7790
+31119,"How much money does Porter need to buy a silver bow, a big blue button, and a purple bow?",,0.15,$,,"big blue button | $0.04
+silver bow | $0.07
+red ribbon | $0.06
+purple bow | $0.04
+pair of googly eyes | $0.04","{'Column 1': ['big blue button', 'silver bow', 'red ribbon', 'purple bow', 'pair of googly eyes'], 'Column 2': ['$0.04', '$0.07', '$0.06', '$0.04', '$0.04']}",5,2,"Find the total cost of a silver bow, a big blue button, and a purple bow.
+
+$0.07 + $0.04 + $0.04 = $0.15
+
+Porter needs $0.15.",free_text,decimal_number,4,train,2,2889
+16596,The table shows a function. Is the function linear or nonlinear?,"['linear', 'nonlinear']",linear,,,"x | y
+18 | 20
+19 | 10
+20 | 0","{'x': ['18', '19', '20'], 'y': ['20', '10', '0']}",4,2,"To determine whether the function is linear or nonlinear, see whether it has a constant rate of change.
+Pick the points in any two rows of the table and calculate the rate of change between them. The first two rows are a good place to start.
+Call the values in the first row x1 and y1. Call the values in the second row x2 and y2.
+Rate of change = \frac{y2 - y1}{x2 - x1}
+ = \frac{10 - 20}{19 - 18}
+ = \frac{-10}{1}
+ = -10
+Now pick any other two rows and calculate the rate of change between them.
+Call the values in the first row x1 and y1. Call the values in the third row x2 and y2.
+Rate of change = \frac{y2 - y1}{x2 - x1}
+ = \frac{0 - 20}{20 - 18}
+ = \frac{-20}{2}
+ = -10
+The two rates of change are the same.
+10.
+This means the rate of change is the same for each pair of points. So, the function has a constant rate of change.
+The function is linear.",multi_choice,boolean_text,8,train,3,7190
+22924,Look at the following schedule. When does Architecture class end?,"['3:15 P.M.', '8:40 A.M.', '8:10 A.M.', '9:40 A.M.']",8:40 A.M.,,Class schedule,"Subject | Begin | End
+Architecture | 8:10 A.M. | 8:40 A.M.
+Spanish Literature | 9:00 A.M. | 9:40 A.M.
+Basketball | 10:15 A.M. | 11:30 A.M.
+Chinese | 11:40 A.M. | 12:10 P.M.
+Essay Writing | 12:50 P.M. | 2:10 P.M.
+Ancient Greek | 2:15 P.M. | 3:15 P.M.","{'Subject': ['Architecture', 'Spanish Literature', 'Basketball', 'Chinese', 'Essay Writing', 'Ancient Greek'], 'Begin': ['8:10 A.M.', '9:00 A.M.', '10:15 A.M.', '11:40 A.M.', '12:50 P.M.', '2:15 P.M.'], 'End': ['8:40 A.M.', '9:40 A.M.', '11:30 A.M.', '12:10 P.M.', '2:10 P.M.', '3:15 P.M.']}",7,3,"Find Architecture class on the schedule. Find the end time for Architecture class.
+
+Architecture: 8:40 A. M.",multi_choice,extractive_text,3,train,4,13068
+23114,Each laundry hamper has 2 sweatshirts. How many sweatshirts are in 6 laundry hampers?,,12,sweatshirts,,"Number of laundry hampers | Number of sweatshirts
+1 | 2
+2 | 4
+3 | 6
+4 | 8
+5 | 10
+6 | ?","{'Number of laundry hampers': ['1', '2', '3', '4', '5', '6'], 'Number of sweatshirts': ['2', '4', '6', '8', '10', '?']}",7,2,Count by twos. Use the chart: there are 12 sweatshirts in 6 laundry hampers.,free_text,integer_number,1,train,0,14899
+23308,A donut shop recorded how many donuts it sold in the past 5 days. How many donuts in total did the shop sell on Monday and Wednesday?,,"2,097",donuts,Donuts sold,"Day | Number of donuts
+Sunday | 6,801
+Monday | 1,072
+Tuesday | 1,216
+Wednesday | 1,025
+Thursday | 1,561","{'Day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'], 'Number of donuts': ['6,801', '1,072', '1,216', '1,025', '1,561']}",6,2,"Find the numbers in the table.
+
+Monday: 1,072
+Wednesday: 1,025
+
+Now add: 1,072 + 1,025 = 2,097.
+
+The shop sold 2,097 donuts on Monday and Wednesday.",free_text,integer_number,3,train,1,46
+24851,What is the total cost for 4+4/5 pounds of soy flour?,,14.40,$,,"bleached white flour | $3/lb
+peanut flour | $6/lb
+unbleached white flour | $3/lb
+whole wheat flour | $6/lb
+soy flour | $3/lb
+hemp flour | $5/lb","{'Column 1': ['bleached white flour', 'peanut flour', 'unbleached white flour', 'whole wheat flour', 'soy flour', 'hemp flour'], 'Column 2': ['$3/lb', '$6/lb', '$3/lb', '$6/lb', '$3/lb', '$5/lb']}",6,2,"Find the cost of the soy flour. Multiply the price per pound by the number of pounds.
+$3 × 4\frac{4}{5} = $3 × 4.8 = $14.40
+The total cost is $14.40.",free_text,decimal_number,6,train,2,10353
+15275,"Look at the table. Then answer the question. At a price of $1,200, is there a shortage or a surplus?","['shortage', 'surplus']",shortage,,,"Price | Quantity demanded | Quantity supplied
+$1,000 | 17,800 | 1,200
+$1,200 | 14,800 | 5,600
+$1,400 | 11,800 | 10,000
+$1,600 | 8,800 | 14,400
+$1,800 | 5,800 | 18,800","{'Price': ['$1,000', '$1,200', '$1,400', '$1,600', '$1,800'], 'Quantity demanded': ['17,800', '14,800', '11,800', '8,800', '5,800'], 'Quantity supplied': ['1,200', '5,600', '10,000', '14,400', '18,800']}",6,3,"At the price of $1,200, the quantity demanded is greater than the quantity supplied. There is not enough of the good or service for sale at that price. So, there is a shortage.
+",multi_choice,boolean_text,5,train,3,11293
+30830,Look at the following schedule. When does the train arrive at Rocky Ravine Town?,"['8:30 P.M.', '8:20 P.M.', '6:30 P.M.', '2:35 P.M.']",8:20 P.M.,,Train schedule,"Location | Arrive | Depart
+Happy Cow Farm | 1:30 P.M. | 1:50 P.M.
+Magician Village | 2:20 P.M. | 2:35 P.M.
+Skyscraper City | 3:35 P.M. | 3:45 P.M.
+Chickenville | 4:35 P.M. | 4:55 P.M.
+City of Green Trees | 5:25 P.M. | 5:45 P.M.
+Pleasant River Campground | 6:15 P.M. | 6:30 P.M.
+Comfy Pillows Resort | 7:15 P.M. | 7:35 P.M.
+Rocky Ravine Town | 8:20 P.M. | 8:30 P.M.","{'Location': ['Happy Cow Farm', 'Magician Village', 'Skyscraper City', 'Chickenville', 'City of Green Trees', 'Pleasant River Campground', 'Comfy Pillows Resort', 'Rocky Ravine Town'], 'Arrive': ['1:30 P.M.', '2:20 P.M.', '3:35 P.M.', '4:35 P.M.', '5:25 P.M.', '6:15 P.M.', '7:15 P.M.', '8:20 P.M.'], 'Depart': ['1:50 P.M.', '2:35 P.M.', '3:45 P.M.', '4:55 P.M.', '5:45 P.M.', '6:30 P.M.', '7:35 P.M.', '8:30 P.M.']}",9,3,"Find Rocky Ravine Town on the schedule. Find the arrival time for Rocky Ravine Town.
+
+Rocky Ravine Town: 8:20 P. M.",multi_choice,extractive_text,3,train,4,3293
+918,Tanner graphed the daily low temperature for 7 days. What is the median of the numbers?,,7,,Daily low temperature,"Day | Temperature (Â°C)
+Thursday | 6
+Friday | 9
+Saturday | 6
+Sunday | 10
+Monday | 4
+Tuesday | 9
+Wednesday | 7","{'Day': ['Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday'], 'Temperature (Â°C)': ['6', '9', '6', '10', '4', '9', '7']}",8,2,"Read the numbers from the table.
+
+6, 9, 6, 10, 4, 9, 7
+
+First, arrange the numbers from least to greatest:
+
+4, 6, 6, 7, 9, 9, 10
+
+Now find the number in the middle.
+
+4, 6, 6, 7, 9, 9, 10
+
+The number in the middle is 7.
+
+The median is 7.",free_text,integer_number,6,train,0,93
+2990,"Every year Rockport has a citywide relay and reports the winning times. According to the table, what was the rate of change between 2018 and 2019?",,1,minutes per year,Winning relay times,"Year | Winning time (minutes)
+2015 | 45
+2016 | 30
+2017 | 29
+2018 | 38
+2019 | 39","{'Year': ['2015', '2016', '2017', '2018', '2019'], 'Winning time (minutes)': ['45', '30', '29', '38', '39']}",6,2,"Plug the numbers into the formula for rate of change and simplify.
+Rate of change
+ = \frac{change in value}{change in time}
+ = \frac{39 minutes - 38 minutes}{2019 - 2018}
+ = \frac{39 minutes - 38 minutes}{1 year}
+ = \frac{1 minute}{1 year}
+ = 1 minute per year
+The rate of change between 2018 and 2019 was 1 minute per year.",free_text,integer_number,8,train,1,8895
+19662,Aubrey has $395.00. Does she have enough to buy a coffee table and a kitchen table?,"['yes', 'no']",yes,,,"couch | $239.00
+leather chair | $397.00
+coffee table | $138.00
+desk | $252.00
+set of bunk beds | $418.00
+kitchen table | $241.00","{'Column 1': ['couch', 'leather chair', 'coffee table', 'desk', 'set of bunk beds', 'kitchen table'], 'Column 2': ['$239.00', '$397.00', '$138.00', '$252.00', '$418.00', '$241.00']}",6,2,"Add the price of a coffee table and the price of a kitchen table:
+
+$138.00 + $241.00 = $379.00
+
+$379.00 is less than $395.00. Aubrey does have enough money.",multi_choice,boolean_text,8,train,2,15476
+23386,The table shows a function. Is the function linear or nonlinear?,"['linear', 'nonlinear']",nonlinear,,,"x | y
+6 | 16
+7 | 9
+8 | 1","{'x': ['6', '7', '8'], 'y': ['16', '9', '1']}",4,2,"To determine whether the function is linear or nonlinear, see whether it has a constant rate of change.
+Pick the points in any two rows of the table and calculate the rate of change between them. The first two rows are a good place to start.
+Call the values in the first row x1 and y1. Call the values in the second row x2 and y2.
+Rate of change = \frac{y2 - y1}{x2 - x1}
+ = \frac{9 - 16}{7 - 6}
+ = \frac{-7}{1}
+ = -7
+Now pick any other two rows and calculate the rate of change between them.
+Call the values in the second row x1 and y1. Call the values in the third row x2 and y2.
+Rate of change = \frac{y2 - y1}{x2 - x1}
+ = \frac{1 - 9}{8 - 7}
+ = \frac{-8}{1}
+ = -8
+The rate of change is not the same for each pair of points. So, the function does not have a constant rate of change.
+The function is nonlinear.",multi_choice,boolean_text,8,train,3,14350
+30346,Look at the following schedule. Tom got on the train at Richmond at 6.15 P.M. What time will he get to Dover?,"['5:45 P.M.', '11:00 A.M.', '12:00 A.M.', '9:30 P.M.']",9:30 P.M.,,Train schedule,"Richmond | 5:15 A.M. | 7:45 A.M. | 12:00 P.M. | 6:15 P.M.
+Allenville | 5:45 A.M. | 8:15 A.M. | 12:30 P.M. | 6:45 P.M.
+Newport | 7:00 A.M. | 9:30 A.M. | 1:45 P.M. | 8:00 P.M.
+Dover | 8:30 A.M. | 11:00 A.M. | 3:15 P.M. | 9:30 P.M.
+Lancaster | 10:15 A.M. | 12:45 P.M. | 5:00 P.M. | 11:15 P.M.
+Winchester | 11:00 A.M. | 1:30 P.M. | 5:45 P.M. | 12:00 A.M.","{'Column 1': ['Richmond', 'Allenville', 'Newport', 'Dover', 'Lancaster', 'Winchester'], 'Column 2': ['5:15 A.M.', '5:45 A.M.', '7:00 A.M.', '8:30 A.M.', '10:15 A.M.', '11:00 A.M.'], 'Column 3': ['7:45 A.M.', '8:15 A.M.', '9:30 A.M.', '11:00 A.M.', '12:45 P.M.', '1:30 P.M.'], 'Column 4': ['12:00 P.M.', '12:30 P.M.', '1:45 P.M.', '3:15 P.M.', '5:00 P.M.', '5:45 P.M.'], 'Column 5': ['6:15 P.M.', '6:45 P.M.', '8:00 P.M.', '9:30 P.M.', '11:15 P.M.', '12:00 A.M.']}",6,5,"Find 6:15 P. M. in the row for Richmond. That column shows the schedule for the train that Tom is on.
+
+Look down the column until you find the row for Dover.
+
+Tom will get to Dover at 9:30 P. M.",multi_choice,extractive_text,4,train,4,8674
+7694,Each field has 2 donkeys. How many donkeys are in 3 fields?,,6,,,"Number of fields | Number of donkeys
+1 | 2
+2 | 4
+3 | ?","{'Number of fields': ['1', '2', '3'], 'Number of donkeys': ['2', '4', '?']}",4,2,Count by twos. Use the chart: there are 6 donkeys in 3 fields.,free_text,integer_number,2,train,0,14299
+32489,A farmer counted the number of apples on each tree in her orchard. How many trees have exactly 37 apples?,,3,,Apples per tree,"Stem | Leaf 
+1 | 6, 9
+2 | 4
+3 | 7, 7, 7, 9
+4 | 
+5 | 
+6 | 
+7 | 1, 8
+8 | 2, 8, 9
+9 | 0","{'Stem': ['1', '2', '3', '4', '5', '6', '7', '8', '9'], 'Leaf ': ['6, 9', '4', '7, 7, 7, 9', '', '', '', '1, 8', '2, 8, 9', '0']}",10,2,"For the number 37, the stem is 3, and the leaf is 7. Find the row where the stem is 3. In that row, count all the leaves equal to 7.
+
+You counted 3 leaves, which are blue in the stem-and-leaf plot above. 3 trees have exactly 37 apples.",free_text,integer_number,4,train,1,7296
+21934,How much money does Lindsey need to buy an orange marker and a green colored pencil?,,1.08,$,,"package of crayons | $0.81
+bright yellow highlighter | $0.79
+orange marker | $0.80
+silver pen | $0.38
+thin green highlighter | $0.59
+green colored pencil | $0.28","{'Column 1': ['package of crayons', 'bright yellow highlighter', 'orange marker', 'silver pen', 'thin green highlighter', 'green colored pencil'], 'Column 2': ['$0.81', '$0.79', '$0.80', '$0.38', '$0.59', '$0.28']}",6,2,"Add the price of an orange marker and the price of a green colored pencil:
+
+$0.80 + $0.28 = $1.08
+
+Lindsey needs $1.08.",free_text,decimal_number,3,train,2,5568
+19141,The table shows a function. Is the function linear or nonlinear?,"['linear', 'nonlinear']",nonlinear,,,"x | y
+16 | 14
+17 | 18
+18 | 19","{'x': ['16', '17', '18'], 'y': ['14', '18', '19']}",4,2,"To determine whether the function is linear or nonlinear, see whether it has a constant rate of change.
+Pick the points in any two rows of the table and calculate the rate of change between them. The first two rows are a good place to start.
+Call the values in the first row x1 and y1. Call the values in the second row x2 and y2.
+Rate of change = \frac{y2 - y1}{x2 - x1}
+ = \frac{18 - 14}{17 - 16}
+ = \frac{4}{1}
+ = 4
+Now pick any other two rows and calculate the rate of change between them.
+Call the values in the second row x1 and y1. Call the values in the third row x2 and y2.
+Rate of change = \frac{y2 - y1}{x2 - x1}
+ = \frac{19 - 18}{18 - 17}
+ = \frac{1}{1}
+ = 1
+The rate of change is not the same for each pair of points. So, the function does not have a constant rate of change.
+The function is nonlinear.",multi_choice,boolean_text,8,train,3,156
+11516,Look at the following schedule. When does the train depart from Fairview?,"['2:30 A.M.', '12:30 A.M.', '12:10 A.M.', '2:05 A.M.']",2:30 A.M.,,Train schedule,"Location | Arrive | Depart
+Norwood | 10:20 P.M. | 10:40 P.M.
+Burlington | 12:10 A.M. | 12:30 A.M.
+Fairview | 2:05 A.M. | 2:30 A.M.
+Hillsboro | 3:20 A.M. | 3:40 A.M.
+Lexington | 5:15 A.M. | 5:25 A.M.
+Kingwood | 6:40 A.M. | 7:00 A.M.","{'Location': ['Norwood', 'Burlington', 'Fairview', 'Hillsboro', 'Lexington', 'Kingwood'], 'Arrive': ['10:20 P.M.', '12:10 A.M.', '2:05 A.M.', '3:20 A.M.', '5:15 A.M.', '6:40 A.M.'], 'Depart': ['10:40 P.M.', '12:30 A.M.', '2:30 A.M.', '3:40 A.M.', '5:25 A.M.', '7:00 A.M.']}",7,3,"Find Fairview on the schedule. Find the departure time for Fairview.
+
+Fairview: 2:30 A. M.",multi_choice,extractive_text,3,train,4,2539
+20696,Jim looked at his calendar to see how many hours he had worked in the past 7 days. What is the median of the numbers?,,6,,Hours worked,"Day | Hours
+Sunday | 3
+Monday | 3
+Tuesday | 6
+Wednesday | 8
+Thursday | 6
+Friday | 4
+Saturday | 9","{'Day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], 'Hours': ['3', '3', '6', '8', '6', '4', '9']}",8,2,"Read the numbers from the table.
+
+3, 3, 6, 8, 6, 4, 9
+
+First, arrange the numbers from least to greatest:
+
+3, 3, 4, 6, 6, 8, 9
+
+Now find the number in the middle.
+
+3, 3, 4, 6, 6, 8, 9
+
+The number in the middle is 6.
+
+The median is 6.",free_text,integer_number,6,train,0,9044
+23633,"During Fitness Day at school, Kimberly and her classmates took part in a pull-up competition, keeping track of the results. What is the largest number of pull-ups done?",,79,pull-ups,Pull-up competition (number of pull-ups),"Stem | Leaf 
+1 | 0, 7
+2 | 4, 9, 9
+3 | 4, 6
+4 | 0, 2, 3
+5 | 3, 6, 8
+6 | 5
+7 | 5, 9","{'Stem': ['1', '2', '3', '4', '5', '6', '7'], 'Leaf ': ['0, 7', '4, 9, 9', '4, 6', '0, 2, 3', '3, 6, 8', '5', '5, 9']}",8,2,"Look at the last row of the stem-and-leaf plot. The last row has the highest stem. The stem for the last row is 7.
+
+Now find the highest leaf in the last row. The highest leaf is 9.
+
+The largest number of pull-ups done has a stem of 7 and a leaf of 9. Write the stem first, then the leaf: 79.
+
+The largest number of pull-ups done is 79 pull-ups.",free_text,integer_number,6,train,1,10610
+23109,How much more does an iguana cost than a king snake?,,54,$,,"king snake | $188
+chameleon | $252
+finch | $197
+rabbit | $105
+cockatoo | $268
+iguana | $242","{'Column 1': ['king snake', 'chameleon', 'finch', 'rabbit', 'cockatoo', 'iguana'], 'Column 2': ['$188', '$252', '$197', '$105', '$268', '$242']}",6,2,"Subtract the price of a king snake from the price of an iguana.
+
+$242 - $188 = $54
+
+An iguana costs $54 more than a king snake.",free_text,integer_number,4,train,2,5537
+14927,The table shows a function. Is the function linear or nonlinear?,"['linear', 'nonlinear']",nonlinear,,,"x | y
+13 | 0
+14 | 3
+15 | 13","{'x': ['13', '14', '15'], 'y': ['0', '3', '13']}",4,2,"To determine whether the function is linear or nonlinear, see whether it has a constant rate of change.
+Pick the points in any two rows of the table and calculate the rate of change between them. The first two rows are a good place to start.
+Call the values in the first row x1 and y1. Call the values in the second row x2 and y2.
+Rate of change = \frac{y2 - y1}{x2 - x1}
+ = \frac{3 - 0}{14 - 13}
+ = \frac{3}{1}
+ = 3
+Now pick any other two rows and calculate the rate of change between them.
+Call the values in the second row x1 and y1. Call the values in the third row x2 and y2.
+Rate of change = \frac{y2 - y1}{x2 - x1}
+ = \frac{13 - 3}{15 - 14}
+ = \frac{10}{1}
+ = 10
+The rate of change is not the same for each pair of points. So, the function does not have a constant rate of change.
+The function is nonlinear.",multi_choice,boolean_text,8,train,3,4386
+34526,Look at the following schedule. When does the speech team meeting end?,"['5:25 P.M.', '5:55 P.M.', '4:20 P.M.', '5:35 P.M.']",4:20 P.M.,,High school schedule,"Event | Begin | End
+speech team meeting | 2:45 P.M. | 4:20 P.M.
+choir rehearsal | 3:45 P.M. | 5:25 P.M.
+theater auditions | 4:50 P.M. | 5:35 P.M.
+swim team practice | 4:55 P.M. | 5:55 P.M.
+women's basketball practice | 5:20 P.M. | 6:05 P.M.","{'Event': ['speech team meeting', 'choir rehearsal', 'theater auditions', 'swim team practice', ""women's basketball practice""], 'Begin': ['2:45 P.M.', '3:45 P.M.', '4:50 P.M.', '4:55 P.M.', '5:20 P.M.'], 'End': ['4:20 P.M.', '5:25 P.M.', '5:35 P.M.', '5:55 P.M.', '6:05 P.M.']}",6,3,"Find the speech team meeting on the schedule. Find the end time for the speech team meeting.
+
+speech team meeting: 4:20 P. M.",multi_choice,extractive_text,3,train,4,8396
+7812,Caleb's class recorded how many states each student has visited. What is the median of the numbers?,,8,,States visited,"Name | Number of states
+Caleb | 8
+Desmond | 8
+Gwen | 4
+Sasha | 9
+Baldwin | 9","{'Name': ['Caleb', 'Desmond', 'Gwen', 'Sasha', 'Baldwin'], 'Number of states': ['8', '8', '4', '9', '9']}",6,2,"Read the numbers from the table.
+
+8, 8, 4, 9, 9
+
+First, arrange the numbers from least to greatest:
+
+4, 8, 8, 9, 9
+
+Now find the number in the middle.
+
+4, 8, 8, 9, 9
+
+The number in the middle is 8.
+
+The median is 8.",free_text,integer_number,7,train,0,13078
+16491,A statistics lab required students to draw cards numbered between 1 and 6 and track the results. Which number was drawn the most times?,,4,,Drawing a number between 1 and 6,"Number drawn | Frequency
+1 | 10
+2 | 7
+3 | 11
+4 | 17
+5 | 13
+6 | 3","{'Number drawn': ['1', '2', '3', '4', '5', '6'], 'Frequency': ['10', '7', '11', '17', '13', '3']}",7,2,"Look at the frequency column. Find the greatest frequency. The greatest frequency is 17, which is in the row for 4. 4 was drawn the most times.",free_text,integer_number,8,train,1,15734
+38244,How much money does Jada need to buy spaghetti and meatballs and grilled eggplant?,,10,$,,"pasta with tomato sauce | $5.00
+spaghetti and meatballs | $4.00
+steamed broccoli | $6.00
+green salad | $4.00
+grilled eggplant | $6.00
+cheese pizza | $4.00","{'Column 1': ['pasta with tomato sauce', 'spaghetti and meatballs', 'steamed broccoli', 'green salad', 'grilled eggplant', 'cheese pizza'], 'Column 2': ['$5.00', '$4.00', '$6.00', '$4.00', '$6.00', '$4.00']}",6,2,"Add the price of spaghetti and meatballs and the price of grilled eggplant:
+
+$4.00 + $6.00 = $10.00
+
+Jada needs $10.00.",free_text,integer_number,4,train,2,6215
+3297,Look at this table. Is this relation a function?,"['yes', 'no']",no,,,"x | y
+3 | 16
+0 | 20
+3 | 19","{'x': ['3', '0', '3'], 'y': ['16', '20', '19']}",4,2,"Look at the x-values in the table.
+
+The x-value 3 is paired with multiple y-values, so the relation is not a function.",multi_choice,boolean_text,8,train,3,669
+3037,Look at the following schedule. When does the Tigers versus Wolves game end?,"['3:15 P.M.', '12:45 P.M.', '1:10 P.M.', '11:55 A.M.']",11:55 A.M.,,Soccer tournament schedule,"Game | Begin | End
+Hawks versus Jaguars | 10:10 A.M. | 11:40 A.M.
+Tigers versus Wolves | 10:25 A.M. | 11:55 A.M.
+Waves versus Alligators | 11:15 A.M. | 12:45 P.M.
+Cardinals versus Cobras | 11:40 A.M. | 1:10 P.M.
+Fire versus Blizzard | 12:55 P.M. | 2:25 P.M.
+Dolphins versus Bears | 1:25 P.M. | 2:55 P.M.
+Thunder versus Eagles | 1:45 P.M. | 3:15 P.M.","{'Game': ['Hawks versus Jaguars', 'Tigers versus Wolves', 'Waves versus Alligators', 'Cardinals versus Cobras', 'Fire versus Blizzard', 'Dolphins versus Bears', 'Thunder versus Eagles'], 'Begin': ['10:10 A.M.', '10:25 A.M.', '11:15 A.M.', '11:40 A.M.', '12:55 P.M.', '1:25 P.M.', '1:45 P.M.'], 'End': ['11:40 A.M.', '11:55 A.M.', '12:45 P.M.', '1:10 P.M.', '2:25 P.M.', '2:55 P.M.', '3:15 P.M.']}",8,3,"Find the Tigers versus Wolves game on the schedule. Find the end time for the Tigers versus Wolves game.
+
+Tigers versus Wolves: 11:55 A. M.",multi_choice,extractive_text,3,train,4,4264
