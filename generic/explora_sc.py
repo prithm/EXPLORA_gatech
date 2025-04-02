@@ -528,9 +528,18 @@ def read_strategyqa(file_path):
     examples = []
     for d in data:
         answer = "Yes" if d["answer"] else "No"
-        ex = {"id": d["qid"], "question": d["question"].lstrip(), "answer": answer, "facts": d["facts"],
+        ex = {"id": d["id"], "question": d["question"].lstrip(), "answer": answer, "facts": d["facts"],
               "decomposition": d["decomposition"]}
-        examples.append(ex)
+        examples.append(ex) 
+    return pd.DataFrame(examples)
+
+def read_json(file_path):
+    with open(file_path, encoding='utf-8') as f:
+        data = json.load(f)
+    examples = []
+    for d in data:
+        ex = {"question": d["question"].lstrip(), "answer": d["answer"]}
+        examples.append(ex) 
     return pd.DataFrame(examples)
 
 def run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name, mode, batch_size):
@@ -561,9 +570,9 @@ def run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name, mode,
         test_data = "datasets/FinQA/finqa_test.csv"
     elif dataset_name == "gsm8k":
         train_data = "datasets/GSM8K/gsm8k_train.csv"
-        test_data = "datasets/GSM8K/gsm8k_test.jsonl"
+        test_data = "datasets/GSM8K/gsm8k_test_v2.json"
     elif dataset_name == "strategyqa":
-        train_data = "datasets/Strategyqa/strategyqa_train.json"
+        train_data = "datasets/Strategyqa/strategyqa_train_v2.json"
         test_data = "datasets/Strategyqa/strategyqa_test.json"
     elif dataset_name == "tabmwp":
         train_data = "datasets/tabmwp/problems_train.json"
@@ -571,16 +580,19 @@ def run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name, mode,
     else:
         raise ValueError(f"Invalid dataset name: {dataset_name}")
 
-    if dataset_name in ["aquarat", "finqa", "gsm8k", "tabmwp"]:
+    if dataset_name in ["aquarat", "finqa", "tabmwp"]:
         train_data = pd.read_csv(train_data) if train_data.endswith(".csv") else pd.read_json(train_data, orient='index')
         test_data = pd.read_csv(test_data) if test_data.endswith(".csv") else pd.read_json(test_data, orient='index')
+    elif dataset_name == "gsm8k":
+        train_data = pd.read_csv(train_data)
+        test_data = read_json(test_data)
     elif dataset_name == "strategyqa":
         train_data = read_strategyqa(train_data)
         test_data = read_strategyqa(test_data)
+    #     exit(1)
     else:
         raise ValueError(f"Invalid dataset name: {dataset_name}")
     final_df = get_open_source_completions(dataset_name, model_name_prefix, pipeline, train_data, test_data, mode, batch_size)
-    # print(final_df)
 
 
 # Example usage: python generic/explora_sc.py mistral7b_16 tabmwp test 12
