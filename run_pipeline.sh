@@ -45,18 +45,17 @@ python generic/explora_sc.py llama1b_16 gsm8k test 12
 python generic/explora_sc.py llama1b_16 tabmwp test 12
 python generic/explora_sc.py llama1b_16 aquarat test 12
 python generic/explora_sc.py llama1b_16 finqa test 12
+python generic/explora_sc.py llama3b_16 strategyqa test 12
+python generic/explora_sc.py llama3b_16 gsm8k test 12
+python generic/explora_sc.py llama3b_16 tabmwp test 12
+python generic/explora_sc.py llama3b_16 aquarat test 12
+python generic/explora_sc.py llama3b_16 finqa test 12
 
 python generic/explora_sc.py llama1b_32 strategyqa test 12
 python generic/explora_sc.py llama1b_32 gsm8k test 12
 python generic/explora_sc.py llama1b_32 tabmwp test 12
 python generic/explora_sc.py llama1b_32 aquarat test 12
 python generic/explora_sc.py llama1b_32 finqa test 12
-
-python generic/explora_sc.py llama3b_16 strategyqa test 12
-python generic/explora_sc.py llama3b_16 gsm8k test 12
-python generic/explora_sc.py llama3b_16 tabmwp test 12
-python generic/explora_sc.py llama3b_16 aquarat test 12
-python generic/explora_sc.py llama3b_16 finqa test 12
 
 python generic/explora_sc.py llama3b_32 strategyqa test 12
 python generic/explora_sc.py llama3b_32 gsm8k test 12

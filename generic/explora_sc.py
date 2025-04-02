@@ -14,6 +14,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BertTokenizer, Ber
 import sys
 import time
 import pynvml
+import warnings
 
 def get_completion(pipeline, msg_in, cot_prompt=True):
     """Generates text completion using the specified language model."""
@@ -472,13 +473,20 @@ def get_open_source_completions(dataset_name, model_name_prefix, pipeline, train
         answers = llm_batch_output(pipeline, prompts, dataset_name)
         
         for (index, row), answer in zip(batch.iterrows(), answers):
-            gt = row["answer"]
-            if dataset_name in ["aquarat", "finqa"]:
+            if dataset_name in ["finqa"]:
+                gt = row["answer"]
                 if answer == gt:
                     matches += 1
                 else:
                     mismatches += 1
+            elif dataset_name in ["aquarat"]:
+                gt = row["correct"]
+                if(answer==gt):
+                    matches+=1
+                else:
+                    mismatches+=1
             elif dataset_name == "gsm8k":
+                gt = row["answer"]
                 try:
                     answer = int(answer)
                     gt = int(re.sub(r'[^0-9.]', "", gt.split("#### ")[1]))
@@ -489,11 +497,13 @@ def get_open_source_completions(dataset_name, model_name_prefix, pipeline, train
                 except:
                     mismatches += 1
             elif dataset_name == "strategyqa":
+                gt = row["answer"]
                 if gt.lower() in answer.lower() or answer.lower() in gt.lower():
                     matches += 1
                 else:
                     mismatches += 1
             elif dataset_name == "tabmwp":
+                gt = row["answer"]
                 if answer != "" and (gt.lower() in answer.lower() or answer.lower() in gt.lower()):
                     matches += 1
                 else:
@@ -503,7 +513,7 @@ def get_open_source_completions(dataset_name, model_name_prefix, pipeline, train
             question_df["answers"].append(answer)
             question_df["ground_truth"].append(gt)
             
-        if i >= 2:
+        if (i+1) * batch_size >= 48:
             break
 
     final_questions = pd.DataFrame(question_df)
@@ -543,6 +553,7 @@ def read_json(file_path):
     return pd.DataFrame(examples)
 
 def run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name, mode, batch_size):
+    warnings.filterwarnings("ignore") # Suppress all warnings
     random.seed(7)
     np.random.seed(7)
     torch.manual_seed(7)
@@ -555,7 +566,11 @@ def run_pipeline(model_name, model_name_prefix, torch_dtype, dataset_name, mode,
     # Model Configuration
     model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch_dtype).to(device)
     tokenizer = AutoTokenizer.from_pretrained(model_name, torch_dtype=torch_dtype)
-    model.generation_config.pad_token_id = model.generation_config.eos_token_id
+    # Explicitly set pad_token_id
+    if tokenizer.pad_token_id is None:
+        tokenizer.pad_token_id = tokenizer.eos_token_id # or another appropriate value
+    model.generation_config.pad_token_id = tokenizer.pad_token_id
+    # model.generation_config.pad_token_id = model.generation_config.eos_token_id
     pipeline = transformers.pipeline("text-generation", model=model, tokenizer=tokenizer, device=device)
     # tokenizer_bert = BertTokenizer.from_pretrained('bert-base-uncased')
     # model_bert = BertModel.from_pretrained('bert-base-uncased').to(device)
