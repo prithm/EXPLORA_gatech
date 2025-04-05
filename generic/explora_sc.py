@@ -149,13 +149,13 @@ def llm_output(pipeline, user_query, dataset, cot_prompt=True):
         return results[0]
 
 
-# def get_embeddings(text_list):
-#     """Gets embeddings for a list of texts."""
-#     inputs = tokenizer_bert(text_list, return_tensors='pt', padding=True, truncation=True).to(device)
-#     with torch.no_grad():
-#         outputs = model_bert(**inputs)
-#     embeddings = outputs.last_hidden_state.mean(dim=1).numpy().tolist()
-#     return embeddings
+def get_embeddings(text_list):
+    """Gets embeddings for a list of texts."""
+    inputs = tokenizer_bert(text_list, return_tensors='pt', padding=True, truncation=True).to(device)
+    with torch.no_grad():
+        outputs = model_bert(**inputs)
+    embeddings = outputs.last_hidden_state.mean(dim=1).numpy().tolist()
+    return embeddings
 
 
 def prompt_for_manual_prediction(ex, shots, dataset):
@@ -513,8 +513,8 @@ def get_open_source_completions(dataset_name, model_name_prefix, pipeline, train
             question_df["answers"].append(answer)
             question_df["ground_truth"].append(gt)
             
-        if (i+1) * batch_size >= 48:
-            break
+        # if (i+1) * batch_size >= 48:
+        #     break
 
     final_questions = pd.DataFrame(question_df)
     final_questions.to_csv(f"output/{dataset_name}_{model_name_prefix}_question_answer.tsv", sep="\t", index=False)

@@ -34,37 +34,32 @@ cp output/finqa_mistral7b_16_selected_exemplar.csv output/finqa_llama1b_32_selec
 cp output/gsm8k_mistral7b_16_selected_exemplar.csv output/gsm8k_llama1b_32_selected_exemplar.csv
 cp output/tabmwp_mistral7b_16_selected_exemplar.csv output/tabmwp_llama1b_32_selected_exemplar.csv
 
-python generic/explora_sc.py mistral7b_32 strategyqa test 12
-python generic/explora_sc.py mistral7b_32 gsm8k test 12
-python generic/explora_sc.py mistral7b_32 tabmwp test 12
-python generic/explora_sc.py mistral7b_32 aquarat test 12
-python generic/explora_sc.py mistral7b_32 finqa test 12
+python GSM8K/explora+SC.py llama1b_16 gsm8k full
+python TabMwp/explora+SC_old.py llama1b_16 tabmwp full
+python Strategy/Strat/strategyqa_explora_api.py llama1b_16 strategyqa full
+python AquaRat/explora+SC.py llama1b_16 aquarat full
+python FinQA/explora+SC.py llama1b_16 finqa full
+
+python GSM8K/explora+SC.py llama3b_16 gsm8k full
+python TabMwp/explora+SC_old.py llama3b_16 tabmwp full
+python Strategy/Strat/strategyqa_explora_api.py llama3b_16 strategyqa full
+python AquaRat/explora+SC.py llama3b_16 aquarat full
+python FinQA/explora+SC.py llama3b_16 finqa full
 
 python generic/explora_sc.py llama1b_16 strategyqa test 12
 python generic/explora_sc.py llama1b_16 gsm8k test 12
 python generic/explora_sc.py llama1b_16 tabmwp test 12
 python generic/explora_sc.py llama1b_16 aquarat test 12
 python generic/explora_sc.py llama1b_16 finqa test 12
+
 python generic/explora_sc.py llama3b_16 strategyqa test 12
 python generic/explora_sc.py llama3b_16 gsm8k test 12
 python generic/explora_sc.py llama3b_16 tabmwp test 12
 python generic/explora_sc.py llama3b_16 aquarat test 12
 python generic/explora_sc.py llama3b_16 finqa test 12
 
-python generic/explora_sc.py llama1b_32 strategyqa test 12
-python generic/explora_sc.py llama1b_32 gsm8k test 12
-python generic/explora_sc.py llama1b_32 tabmwp test 12
-python generic/explora_sc.py llama1b_32 aquarat test 12
-python generic/explora_sc.py llama1b_32 finqa test 12
-
-python generic/explora_sc.py llama3b_32 strategyqa test 12
-python generic/explora_sc.py llama3b_32 gsm8k test 12
-python generic/explora_sc.py llama3b_32 tabmwp test 12
-python generic/explora_sc.py llama3b_32 aquarat test 12
-python generic/explora_sc.py llama3b_32 finqa test 12
-
-python generic/explora_sc.py llama1b_16 strategyqa full 12
-python generic/explora_sc.py llama1b_16 gsm8k full 12
-python generic/explora_sc.py llama1b_16 tabmwp full 12
-python generic/explora_sc.py llama1b_16 aquarat full 12
-python generic/explora_sc.py llama1b_16 finqa full 12
+python generic/explora_sc.py mistral7b_16 strategyqa test 12
+python generic/explora_sc.py mistral7b_16 gsm8k test 12
+python generic/explora_sc.py mistral7b_16 tabmwp test 12
+python generic/explora_sc.py mistral7b_16 aquarat test 12
+python generic/explora_sc.py mistral7b_16 finqa test 12

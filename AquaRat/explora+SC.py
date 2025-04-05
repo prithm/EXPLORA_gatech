@@ -53,25 +53,70 @@ import transformers
 import os
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-model_name = "mistralai/Mistral-7B-Instruct-v0.1"
-model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16)
+import sys
+
+# "mistral7b_16", "mistral7b_32", "llama3b_16", "llama3b_32", "llama1b_16", "llama1b_32"
+model_name_prefix = sys.argv[1]
+# "aquarat", "finqa", "gsm8k", "strategyqa", "tabmwp"
+dataset_name = sys.argv[2]
+mode = sys.argv[3]
+# batch_size = int(sys.argv[4])
+    
+print(f"model_name_prefix: {model_name_prefix}, dataset_name: {dataset_name}, mode: {mode}")
+print("\n\n")
+    
+torch_dtype=torch.float16
+model_name = ""
 
 # CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 ./cuda_executable
 if torch.cuda.is_available():
     device = torch.device("cuda")
 else:
     device = torch.device("cpu")
+    
+if model_name_prefix.startswith("mistral7b"):
+    model_name = "mistralai/Mistral-7B-Instruct-v0.1"
+elif model_name_prefix.startswith("llama3b"):
+    model_name = "meta-llama/Llama-3.2-3B-Instruct"
+elif model_name_prefix.startswith("llama1b"):
+    model_name = "meta-llama/Llama-3.2-1B-Instruct"
+else:
+    raise ValueError(f"Invalid model name: {model_name_prefix}")
 
-model = model.to(device)
-pipeline = transformers.pipeline(
-    "text-generation",
-    model=model_name,
-    torch_dtype=torch.float16,
-    device_map="auto",
-)
+# Model Configuration
+model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch_dtype).to(device)
+tokenizer = AutoTokenizer.from_pretrained(model_name, torch_dtype=torch_dtype)
+# Explicitly set pad_token_id
+if tokenizer.pad_token_id is None:
+    tokenizer.pad_token_id = tokenizer.eos_token_id # or another appropriate value
+model.generation_config.pad_token_id = tokenizer.pad_token_id
+# model.generation_config.pad_token_id = model.generation_config.eos_token_id
+pipeline = transformers.pipeline("text-generation", model=model, tokenizer=tokenizer, device=device)
 
-tokenizer = AutoTokenizer.from_pretrained(model_name, torch_dtype=torch.float16)
-model.generation_config.pad_token_id = model.generation_config.eos_token_id
+tokenizer_bert = BertTokenizer.from_pretrained('bert-base-uncased')
+model_bert = BertModel.from_pretrained('bert-base-uncased')
+
+logging.set_verbosity_error()
+
+# model_name = "mistralai/Mistral-7B-Instruct-v0.1"
+# model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16)
+
+# # CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 ./cuda_executable
+# if torch.cuda.is_available():
+#     device = torch.device("cuda")
+# else:
+#     device = torch.device("cpu")
+
+# model = model.to(device)
+# pipeline = transformers.pipeline(
+#     "text-generation",
+#     model=model_name,
+#     torch_dtype=torch.float16,
+#     device_map="auto",
+# )
+
+# tokenizer = AutoTokenizer.from_pretrained(model_name, torch_dtype=torch.float16)
+# model.generation_config.pad_token_id = model.generation_config.eos_token_id
 
 def prompt_for_manual_prediction(ex, shots):
 
@@ -182,16 +227,6 @@ def self_con(tmp_list):
     n = sorted(d.items(), key=lambda x:x[1], reverse=True)
     #print("---- sorted list = ",n)
     return n
-
-
-
-
-tokenizer_bert = BertTokenizer.from_pretrained('bert-base-uncased')
-model_bert = BertModel.from_pretrained('bert-base-uncased')
-
-logging.set_verbosity_error()
-
-
 
 ######################################################################################################
 
@@ -1324,7 +1359,7 @@ def get_open_source_completions(test_data, data):
     # exemplars=np.array_split(merged_exemplars, 10)
 
     merged_exemplars = pd.concat(exemplars)
-    merged_exemplars.to_csv("output/aquarat_static_subset_selection_mistral_subset_selection.csv")
+    merged_exemplars.to_csv(f"output/{dataset_name}_{model_name_prefix}_subset_selection.csv")
     
     #*****************************************************************************
     print("\n\n\n_____________Take the exemplar with minimum validation loss and use it as the exemplar")
@@ -1337,53 +1372,53 @@ def get_open_source_completions(test_data, data):
     index=0
     acc_records = []
 
-    exemplars.to_csv("output/aquarat_static_subset_selection_mistral3_selected_exemplar.csv")
+    exemplars.to_csv(f"output/{dataset_name}_{model_name_prefix}_selected_exemplar.csv")
 
-    question_df = {"question":[],"answers":[], "ground_truth": []}
-    for index, row in test_data.iterrows():
+    # question_df = {"question":[],"answers":[], "ground_truth": []}
+    # for index, row in test_data.iterrows():
 
-        tmp_list = in_context_manual_prediction(row,exemplars)
-        #print(tmp[0])
+    #     tmp_list = in_context_manual_prediction(row,exemplars)
+    #     #print(tmp[0])
         
-        n = self_con(tmp_list)
-        answer = n[0][0]
-        if answer=="" and len(n)>1: answer = n[1][0]
+    #     n = self_con(tmp_list)
+    #     answer = n[0][0]
+    #     if answer=="" and len(n)>1: answer = n[1][0]
             
-        # ans = ""
-        # if len(tmp[0].split("The option is "))>1:
-        #     ans = tmp[0].split("The option is ")[1][0]
-        # answer=ans
+    #     # ans = ""
+    #     # if len(tmp[0].split("The option is "))>1:
+    #     #     ans = tmp[0].split("The option is ")[1][0]
+    #     # answer=ans
         
-        # print("\nAnswer: ", answer)
-        gt = row["correct"]
-        # print("GT: ", gt)
-        if(answer==gt):
-          matches+=1
-        else:
-          mismatches+=1
+    #     # print("\nAnswer: ", answer)
+    #     gt = row["correct"]
+    #     # print("GT: ", gt)
+    #     if(answer==gt):
+    #       matches+=1
+    #     else:
+    #       mismatches+=1
 
-        question_df['question'].append(row["question"])
-        question_df["answers"].append(answer)
-        question_df["ground_truth"].append(gt)
+    #     question_df['question'].append(row["question"])
+    #     question_df["answers"].append(answer)
+    #     question_df["ground_truth"].append(gt)
 
-    print("EM:",matches/(matches+mismatches))
+    # print("EM:",matches/(matches+mismatches))
 
-    final_questions = pd.DataFrame(question_df)
-    final_questions.to_csv("output/aquarat_static_mistral_question_answer.tsv",sep="\t",index=False)
+    # final_questions = pd.DataFrame(question_df)
+    # final_questions.to_csv("output/aquarat_static_mistral_question_answer.tsv",sep="\t",index=False)
     
-    result_dict = {}
-    result_dict["min_exemplar_error_index"] = [ind]
-    result_dict["min_exemplar_error"] = [avg_err[ind]]
-    result_dict["matches"] = [matches]
-    result_dict["mismatches"] = [mismatches]
-    result_dict["EM"] = [matches/(matches+mismatches)]
-    result_dict["val_data_len"] = [len(val_data)]
-    result_dict["train_data_len"] = [len(train_data)]
-    result_dict["test_data_len"] = [len(test_data)]
-    pd.DataFrame(result_dict).to_csv("output/aquarat_mistral_7B_result_summary.csv")
-    print(result_dict)
+    # result_dict = {}
+    # result_dict["min_exemplar_error_index"] = [ind]
+    # result_dict["min_exemplar_error"] = [avg_err[ind]]
+    # result_dict["matches"] = [matches]
+    # result_dict["mismatches"] = [mismatches]
+    # result_dict["EM"] = [matches/(matches+mismatches)]
+    # result_dict["val_data_len"] = [len(val_data)]
+    # result_dict["train_data_len"] = [len(train_data)]
+    # result_dict["test_data_len"] = [len(test_data)]
+    # pd.DataFrame(result_dict).to_csv("output/aquarat_mistral_7B_result_summary.csv")
+    # print(result_dict)
 
-    return final_questions
+    # return final_questions
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -1395,8 +1430,9 @@ def test_few_shot_prediction():
     # ADVHOTPOT test dataset
     test_data = read_AHOTPOT_test_data()
 
-    final_df = get_open_source_completions(test_data, train_data)
-    print(final_df)
+    # final_df = 
+    get_open_source_completions(test_data, train_data)
+    # print(final_df)
 
 
 if __name__=='__main__':

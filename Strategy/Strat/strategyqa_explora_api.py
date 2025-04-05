@@ -16,32 +16,72 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BertTokenizer, Ber
 
 tokenizer_bert = BertTokenizer.from_pretrained('bert-base-uncased')
 model_bert = BertModel.from_pretrained('bert-base-uncased')
-logging.set_verbosity_error()
+# logging.set_verbosity_error()
 
 random.seed(7)
 np.random.seed(7)
 torch.manual_seed(7)
 
+import sys
+
+# "mistral7b_16", "mistral7b_32", "llama3b_16", "llama3b_32", "llama1b_16", "llama1b_32"
+model_name_prefix = sys.argv[1]
+# "aquarat", "finqa", "gsm8k", "strategyqa", "tabmwp"
+dataset_name = sys.argv[2]
+mode = sys.argv[3]
+# batch_size = int(sys.argv[4])
+    
+print(f"model_name_prefix: {model_name_prefix}, dataset_name: {dataset_name}, mode: {mode}")
+print("\n\n")
+    
+torch_dtype=torch.float16
+model_name = ""
+
+# CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 ./cuda_executable
 if torch.cuda.is_available():
     device = torch.device("cuda")
 else:
     device = torch.device("cpu")
+    
+if model_name_prefix.startswith("mistral7b"):
+    model_name = "mistralai/Mistral-7B-Instruct-v0.1"
+elif model_name_prefix.startswith("llama3b"):
+    model_name = "meta-llama/Llama-3.2-3B-Instruct"
+elif model_name_prefix.startswith("llama1b"):
+    model_name = "meta-llama/Llama-3.2-1B-Instruct"
+else:
+    raise ValueError(f"Invalid model name: {model_name_prefix}")
 
-###########################################################################################
-# model_name = "google/flan-t5-large"
-# model = AutoModelForSeq2SeqLM.from_pretrained(model_name, torch_dtype=torch.float16)
-model_name = "mistralai/Mistral-7B-Instruct-v0.1"
-model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16)
-tokenizer = AutoTokenizer.from_pretrained(model_name, torch_dtype=torch.float16)
-model.generation_config.pad_token_id = model.generation_config.eos_token_id
-model = model.to(device)
+# Model Configuration
+model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch_dtype).to(device)
+tokenizer = AutoTokenizer.from_pretrained(model_name, torch_dtype=torch_dtype)
+# Explicitly set pad_token_id
+if tokenizer.pad_token_id is None:
+    tokenizer.pad_token_id = tokenizer.eos_token_id # or another appropriate value
+model.generation_config.pad_token_id = tokenizer.pad_token_id
+# model.generation_config.pad_token_id = model.generation_config.eos_token_id
+pipeline = transformers.pipeline("text-generation", model=model, tokenizer=tokenizer, device=device)
 
-pipeline = transformers.pipeline(
-    "text-generation",
-    model=model_name,
-    torch_dtype=torch.float16,
-    device_map="auto",
-)
+# if torch.cuda.is_available():
+#     device = torch.device("cuda")
+# else:
+#     device = torch.device("cpu")
+
+# ###########################################################################################
+# # model_name = "google/flan-t5-large"
+# # model = AutoModelForSeq2SeqLM.from_pretrained(model_name, torch_dtype=torch.float16)
+# model_name = "mistralai/Mistral-7B-Instruct-v0.1"
+# model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16)
+# tokenizer = AutoTokenizer.from_pretrained(model_name, torch_dtype=torch.float16)
+# model.generation_config.pad_token_id = model.generation_config.eos_token_id
+# model = model.to(device)
+
+# pipeline = transformers.pipeline(
+#     "text-generation",
+#     model=model_name,
+#     torch_dtype=torch.float16,
+#     device_map="auto",
+# )
 
 def get_completion(msg_in):
 
@@ -1201,7 +1241,7 @@ def get_open_source_completions(data):
     print("while loop completed!")
 
     merged_exemplars = pd.concat(exemplars)
-    merged_exemplars.to_csv("output/strategyqa_mistral_7B_static_subset_selection.csv")
+    merged_exemplars.to_csv(f"output/{dataset_name}_{model_name_prefix}_subset_selection.csv")
     
     # merged_exemplars = pd.read_csv("output/case_aquarat_exemplars.csv")
     # exemplars = [merged_exemplars[0:5],merged_exemplars[5:10],merged_exemplars[10:15],merged_exemplars[15:20],merged_exemplars[20:25],merged_exemplars[25:30],merged_exemplars[30:35],merged_exemplars[35:40],merged_exemplars[40:45],merged_exemplars[45:50]]
@@ -1216,50 +1256,50 @@ def get_open_source_completions(data):
     index=0
     acc_records = []
 
-    exemplars.to_csv("output/strategyqa_mistral_7B_selected_exemplar.csv")
+    exemplars.to_csv(f"output/{dataset_name}_{model_name_prefix}_selected_exemplar.csv")
 
-    question_df = {"question":[],"answers":[], "ground_truth": []}
-    for index, row in tqdm(test_data.iterrows(), total=len(test_data)):
+    # question_df = {"question":[],"answers":[], "ground_truth": []}
+    # for index, row in tqdm(test_data.iterrows(), total=len(test_data)):
 
-        prompt = prompt_for_manual_prediction(row, exemplars)
-        tmp = llm_output(prompt)
+    #     prompt = prompt_for_manual_prediction(row, exemplars)
+    #     tmp = llm_output(prompt)
 
-        answer = ""
-        if len(tmp.split("The answer is:"))>1:
-            answer = tmp.split("The answer is:")[1]
-            answer = answer.split("\n")[0]
+    #     answer = ""
+    #     if len(tmp.split("The answer is:"))>1:
+    #         answer = tmp.split("The answer is:")[1]
+    #         answer = answer.split("\n")[0]
 
-        # print("\nAnswer: ", answer)
-        # print("GT: ", row["answer"])
-        ground_truth = row["answer"]
+    #     # print("\nAnswer: ", answer)
+    #     # print("GT: ", row["answer"])
+    #     ground_truth = row["answer"]
         
-        if ground_truth.lower() in answer.lower() or answer.lower() in ground_truth.lower():
-            matches+=1
-        else:
-            mismatches+=1
+    #     if ground_truth.lower() in answer.lower() or answer.lower() in ground_truth.lower():
+    #         matches+=1
+    #     else:
+    #         mismatches+=1
 
-        question_df['question'].append(row["question"])
-        question_df["answers"].append(answer)
-        question_df["ground_truth"].append(ground_truth)
+    #     question_df['question'].append(row["question"])
+    #     question_df["answers"].append(answer)
+    #     question_df["ground_truth"].append(ground_truth)
     
-    final_questions = pd.DataFrame(question_df)
-    final_questions.to_csv("output/strategyqa_mistral_7B_question_answer.tsv",sep="\t",index=False)
+    # final_questions = pd.DataFrame(question_df)
+    # final_questions.to_csv("output/strategyqa_mistral_7B_question_answer.tsv",sep="\t",index=False)
 
-    result_dict = {}
-    result_dict["min_exemplar_error_index"] = [ind]
-    result_dict["min_exemplar_error"] = [avg_err[ind]]
-    result_dict["matches"] = [matches]
-    result_dict["mismatches"] = [mismatches]
-    result_dict["EM"] = [matches/(matches+mismatches)]
-    result_dict["val_data_len"] = [len(val_data)]
-    result_dict["train_data_len"] = [len(train_data)]
-    result_dict["test_data_len"] = [len(test_data)]
-    pd.DataFrame(result_dict).to_csv("output/strategyqa_mistral_7B_result_summary.csv")
-    print(result_dict)
+    # result_dict = {}
+    # result_dict["min_exemplar_error_index"] = [ind]
+    # result_dict["min_exemplar_error"] = [avg_err[ind]]
+    # result_dict["matches"] = [matches]
+    # result_dict["mismatches"] = [mismatches]
+    # result_dict["EM"] = [matches/(matches+mismatches)]
+    # result_dict["val_data_len"] = [len(val_data)]
+    # result_dict["train_data_len"] = [len(train_data)]
+    # result_dict["test_data_len"] = [len(test_data)]
+    # pd.DataFrame(result_dict).to_csv("output/strategyqa_mistral_7B_result_summary.csv")
+    # print(result_dict)
 
-    print("EM:",matches/(matches+mismatches))
+    # print("EM:",matches/(matches+mismatches))
 
-    return final_questions
+    # return final_questions
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -1270,8 +1310,8 @@ def test_few_shot_prediction():
 
     print("Data read successfully")
 
-    final_df = get_open_source_completions(train_data)
-    print(final_df)
+    get_open_source_completions(train_data)
+    # print(final_df)
 
 
 if __name__=='__main__':
