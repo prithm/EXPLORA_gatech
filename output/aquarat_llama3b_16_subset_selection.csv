@@ -1,0 +1,77 @@
+,question,options,rationale,correct,cluster,index
+46111,"Rates for having a manuscript typed at a certain typing service are $6 per page for the first time a page is typed and $4 per page each time a page is revised. If a certain manuscript has 100 pages, of which 35 were revised only once, 15 were revised twice, and the rest required no revisions, what was the total cost of having the manuscript typed?","['A)$860', 'B)$850', 'C)$840', 'D)$830', 'E)$820']","50 pages typed 1x
+35 pages typed 2x (original + one revision)
+15 pages typed 3x (original + two revisions)
+50(6)+35(6+4)+15(6+4+4)=300+350+210=860
+Answer - A",A,0,54617
+26672,Two trains 140 m and 160 m long run at the speed of 60 km/hr and 40 km/hr respectively in opposite directions on parallel tracks. The time which they take to cross each other is?,"['A)6.3', 'B)5.2', 'C)4.9', 'D)10.8', 'E)10.5']","Answer: Option D
+Relative speed = 60 + 40 = 100 km/hr.
+= 100 * 5/18 = 250/9 m/sec.
+distance covered in crossing each other = 140 + 160 = 300 m.
+Required time = 300 * 9/250 = 54/5 = 10.8 sec.",D,1,64310
+28233,What is the sum of the different positive prime factors of 620?,"['A)17', 'B)24', 'C)38', 'D)47', 'E)62']","The prime factorization of 620
+= 62 * 10
+= 2*31 * 2*5
+The sum of the different positive prime factors = 2+5+31 = 38
+The answer is C.",C,2,38056
+69907,"My boss has $243,986 in the business account. What is the least amount of money (in whole number of dollars) that he must add to his account if she wants to split this money evenly among his nine employees?","['A)$1', 'B)$2', 'C)$3', 'D)$4', 'E)$6']","To find the least amount he should add to his saving account to split the money evenly among his employees,
+he needs to make the total divisible by 9
+Simply add the individual digits of the total = 2+4+3+9+8+6 =
+If you add 4 , the number is divisible by 9 (32+ 4)
+Correct Option : D",D,3,45587
+9632,How many three letter words are formed using the letters of the word TIME?,"['A)16', 'B)86', 'C)12', 'D)24', 'E)27']","The number of letters in the given word is four.
+The number of three letter words that can be formed using these four letters is 4P3
+= 4 * 3 * 2 = 24.
+Answer:D",D,4,358
+20758,"In a certain animal population, for each of the first 3 months of life, the probability that an animal will die during that month is 1/4. For a group of 200 newborn members of the population, approximately how many would be expected to survive the first 3 months of life?","['A)40', 'B)46', 'C)52', 'D)62', 'E)85']","The probability of survival for each of the first 3 months of life is 1-1/4=3/4, so of 200 newborn 200*3/4 *3/4*3/4=~85 is expected to survive.
+Answer: E.",E,0,53779
+91194,A starts walking at 4 kmph and 4 hours after his start B starts cycling at 10 kmph. After how much distance will B catch up with A,"['A)26.2 km', 'B)25.7 km', 'C)23.2 km', 'D)26.67 km', 'E)None of these']","Explanation:
+Distance travelled by each of them is to be made equal.
+=> Distance travelled walking = Distance covered cycling.
+Let after 4 hours of walking, A walk for x hours more before B catches up with him.
+=> Distance = Speed * Time
+(4+x)4 = 10x
+x = 8/3
+Therefore, It takes B 8/3 hours to catch up with A. Distance: 8/3 x 10 = 80/3 km = 26.67
+ANSWER: D",D,1,66263
+48428,"From the integer n, if n*n*n is odd, then what is true from below options?","['A)n is odd', 'B)n is odd and n*n is even', 'C)n is even', 'D)n*n is even', 'E)n*n odd']","n is odd and n*n is even
+Option B",B,2,28366
+92153,Rs.8000 become Rs.9261 in a certain interval of time at the rate of 5% per annum of C.I. Find the time?,"['A)10years', 'B)12 years', 'C)5 years', 'D)3 years', 'E)24 years']","Explanation:
+9261 = 8000(21/20)N
+(21/20)3 = (21/20)N => N = 3 years
+Answer:D",D,3,5719
+60372,"Look at this series: 3, 4, 7, 8, 11, 12, ... What number should come next?","['A)7', 'B)10', 'C)14', 'D)15', 'E)16']","Explanation: This alternating addition series begins with 3; then 1 is added to give 4; then 3 is added to give 7; then 1 is added, and so on.
+Answer: Option D",D,4,62453
+54535,"A manufacturer produces a certain men's athletic shoe in integer sizes from 8 to 17. For this particular shoe, each unit increase in size corresponds to a 1/5-inch increase in the length of the shoe. If the largest size of this shoe is 20% longer than the smallest size, how long, in inches, is the shoe in size 15?","['A)8.6', 'B)9.8', 'C)10.4', 'D)11.2', 'E)12.6']","Let x be the length of the size 8 shoe.
+Then 0.2x = 9/5
+x = 9 inches
+The size 15 shoe has a length of 9 + 7/5 = 10.4 inches
+The answer is C.",C,0,27508
+56724,A Ball is dropped from 8 m height.it rebounds to half the height when it hits the ground. What is the distance travelled by the ball before it hits the ground?,"['A)20m', 'B)21m', 'C)22m', 'D)24m', 'E)28m']","distance travelled by the ball before coming to rest = 8+4+4+2+2+1+1+(1/2)+(1/2)+(1/4)+(1/4)+...upto infinity
+=8+2*[4+2+1+(1/2)+(1/4)+...]
+=8+2*[4/(1-1/2)]
+=8+2*8
+=24 m
+ANSWER:D",D,1,46986
+88060,"If x is an even integer and y = 5x + 1, which of the following CANNOT be a divisor of y?","['A)11', 'B)31', 'C)21', 'D)41', 'E)30']","x takes even values as 2,4,6,8.,
+y=5x+1
+x is an even term so 5x must be an even term when it adds with 1 so it must be a odd integer
+30 didn't follows this condition ans is E",E,2,27812
+60188,"John went to a shop and bought things worth Rs. 25, out of which 30 Paise went on sales tax on taxable purchases. If the tax rate was 6%, then what was the cost of the tax free items?","['A)17', 'B)18', 'C)19.7', 'D)21', 'E)27']","Total cost of the items he purchased = Rs.25
+Given that out of this Rs.25, 30 Paise is given as tax
+=> Total tax incurred = 30 Paise = Rs.30/100
+Let the cost of the tax free items = x
+Given that tax rate = 6%
+∴ (25−30/100−x)6/100 = 30/100
+⇒ 6(25 −0.3 −x) = 30
+⇒ (25 − 0.3 − x) = 5
+⇒ x = 25 − 0.3 − 5 = 19.7
+C)",C,3,44519
+16978,Solve below question 2x + 1 = -17,"['A)-8', 'B)-9', 'C)-5', 'D)-4', 'E)1']","1. Subtract 1 from both sides:
+2x + 1 - 1 = -17 - 1
+2. Simplify both sides:
+2x = -18
+3. Divide both sides by 2:
+4. Simplify both sides:
+x = -9
+B",B,4,56969
